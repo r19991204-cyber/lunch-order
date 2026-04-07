@@ -10,35 +10,63 @@
     --bg:#FDF6ED;--card:#FFFFFF;--primary:#C0392B;--primary-light:#E74C3C;
     --accent:#E8A838;--accent2:#2980B9;--text:#1A1A1A;--text2:#555;--text3:#888;
     --border:#E8D5B7;--green:#27AE60;--shadow:0 2px 12px rgba(0,0,0,0.08);--radius:14px;
+    --admin:#7D3C98;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px;}
-  .header{background:var(--primary);color:white;padding:16px 20px 14px;position:sticky;top:0;z-index:100;box-shadow:0 3px 16px rgba(192,57,43,0.3);}
-  .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+
+  /* ── HEADER ── */
+  .header{background:var(--primary);color:white;padding:16px 20px 12px;position:sticky;top:0;z-index:100;box-shadow:0 3px 16px rgba(192,57,43,0.3);}
+  .header.admin-mode{background:var(--admin);}
+  .header-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
   .header h1{font-size:20px;font-weight:900;letter-spacing:1px;}
   .header .date{font-size:12px;opacity:0.8;}
-  .my-name-badge{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:20px;padding:4px 12px;font-size:13px;cursor:pointer;white-space:nowrap;}
-  .tabs{display:flex;background:white;border-bottom:2px solid var(--border);position:sticky;top:64px;z-index:99;}
-  .tab{flex:1;text-align:center;padding:12px 8px;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;position:relative;}
+  .name-badge{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);border-radius:20px;padding:4px 12px;font-size:13px;cursor:pointer;white-space:nowrap;}
+
+  /* ── SYNC BAR ── */
+  .sync-bar{font-size:11px;text-align:right;padding:2px 16px;height:17px;}
+  .sync-bar.ok{color:var(--green);} .sync-bar.syncing{color:var(--accent);} .sync-bar.err{color:var(--primary);}
+
+  /* ── TABS ── */
+  .tabs{display:flex;background:white;border-bottom:2px solid var(--border);position:sticky;top:62px;z-index:99;}
+  .tab{flex:1;text-align:center;padding:11px 6px;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all 0.2s;position:relative;}
   .tab.active{color:var(--primary);border-bottom-color:var(--primary);}
-  .tab .badge{position:absolute;top:6px;right:8px;background:var(--primary);color:white;border-radius:10px;padding:1px 6px;font-size:10px;min-width:18px;}
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;}
+  .tab.admin-tab.active{color:var(--admin);border-bottom-color:var(--admin);}
+  .tab .badge{position:absolute;top:5px;right:6px;background:var(--primary);color:white;border-radius:10px;padding:1px 5px;font-size:10px;min-width:16px;}
+
+  /* ── MODALS ── */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;align-items:center;justify-content:center;}
   .modal-overlay.show{display:flex;}
-  .modal{background:white;border-radius:var(--radius);padding:28px 24px;width:88%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.2);}
+  .modal{background:white;border-radius:var(--radius);padding:28px 24px;width:88%;max-width:360px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.25);}
   .modal h2{font-size:18px;margin-bottom:8px;}
   .modal p{font-size:13px;color:var(--text2);margin-bottom:20px;}
-  .modal input{width:100%;border:2px solid var(--border);border-radius:10px;padding:12px 14px;font-size:16px;font-family:inherit;outline:none;margin-bottom:16px;}
+  .modal input{width:100%;border:2px solid var(--border);border-radius:10px;padding:12px 14px;font-size:16px;font-family:inherit;outline:none;margin-bottom:14px;}
   .modal input:focus{border-color:var(--primary);}
-  .btn-primary{background:var(--primary);color:white;border:none;border-radius:10px;padding:13px 28px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;width:100%;transition:background 0.2s;}
+  .btn-primary{background:var(--primary);color:white;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;width:100%;}
   .btn-primary:disabled{opacity:0.5;cursor:default;}
+  .btn-admin{background:var(--admin);color:white;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;width:100%;margin-top:10px;}
+  .btn-secondary{background:var(--bg);color:var(--text);border:2px solid var(--border);border-radius:10px;padding:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;}
+
+  /* ── SECTIONS ── */
   .section{display:none;padding:16px;}
   .section.active{display:block;}
-  .store-selector{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow);border:1px solid var(--border);}
-  .store-selector h3{font-size:14px;color:var(--text3);margin-bottom:12px;font-weight:500;}
-  .store-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-  .store-btn{border:2px solid var(--border);background:var(--bg);border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;transition:all 0.2s;color:var(--text2);}
-  .store-btn.active{border-color:var(--primary);background:#FEF0EE;color:var(--primary);}
-  .store-btn .emoji{font-size:20px;display:block;margin-bottom:2px;}
+
+  /* ── WAITING SCREEN ── */
+  .waiting-screen{text-align:center;padding:50px 24px;}
+  .waiting-screen .big-emoji{font-size:60px;display:block;margin-bottom:16px;}
+  .waiting-screen h2{font-size:20px;font-weight:900;margin-bottom:10px;}
+  .waiting-screen p{font-size:14px;color:var(--text2);line-height:1.7;}
+  .today-stores{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+  .store-badge{background:white;border:2px solid var(--border);border-radius:12px;padding:10px 18px;font-size:14px;font-weight:700;box-shadow:var(--shadow);}
+  .store-badge.food{border-color:var(--primary);color:var(--primary);}
+  .store-badge.drink{border-color:var(--accent2);color:var(--accent2);}
+
+  /* ── STORE SELECTOR (ordering) ── */
+  .store-info-bar{background:white;border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .store-info-bar .label{font-size:12px;color:var(--text3);font-weight:500;}
+  .store-info-bar .name{font-size:15px;font-weight:900;color:var(--primary);}
+
+  /* ── MENU ── */
   .category-title{font-size:16px;font-weight:900;color:var(--primary);padding:14px 0 8px;border-bottom:2px solid var(--primary);margin-bottom:10px;}
   .menu-item{background:var(--card);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;align-items:center;gap:12px;}
   .menu-item.selected{border-color:var(--primary);background:#FEF8F7;}
@@ -55,140 +83,201 @@
   .remark-row{background:var(--card);border-radius:var(--radius);padding:14px;margin:16px 0;box-shadow:var(--shadow);border:1px solid var(--border);}
   .remark-row label{font-size:13px;font-weight:700;display:block;margin-bottom:8px;}
   .remark-row input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;font-family:inherit;outline:none;}
+
+  /* ── ADMIN PANEL ── */
+  .admin-section{padding:16px;}
+  .admin-card{background:var(--card);border-radius:var(--radius);padding:18px;margin-bottom:14px;box-shadow:var(--shadow);border:2px solid #E8DAEF;}
+  .admin-card h3{font-size:15px;font-weight:900;color:var(--admin);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+  .store-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .store-btn{border:2px solid var(--border);background:var(--bg);border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;transition:all 0.2s;color:var(--text2);}
+  .store-btn.active-food{border-color:var(--primary);background:#FEF0EE;color:var(--primary);}
+  .store-btn.active-drink{border-color:var(--accent2);background:#EBF5FB;color:var(--accent2);}
+  .store-btn .emoji{font-size:22px;display:block;margin-bottom:3px;}
+
+  /* Status toggle */
+  .status-control{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg);border-radius:12px;}
+  .status-label{flex:1;}
+  .status-label .title{font-size:14px;font-weight:700;}
+  .status-label .desc{font-size:12px;color:var(--text3);margin-top:2px;}
+  .big-toggle{position:relative;width:60px;height:32px;flex-shrink:0;}
+  .big-toggle input{display:none;}
+  .big-slider{position:absolute;inset:0;background:#ccc;border-radius:32px;cursor:pointer;transition:0.3s;}
+  .big-slider::before{content:'';position:absolute;width:26px;height:26px;left:3px;top:3px;background:white;border-radius:50%;transition:0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+  .big-toggle input:checked+.big-slider{background:var(--green);}
+  .big-toggle input:checked+.big-slider::before{transform:translateX(28px);}
+
+  .status-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:12px;}
+  .status-badge.open{background:#EAFAF1;color:var(--green);border:1.5px solid var(--green);}
+  .status-badge.closed{background:#FDEDEC;color:var(--primary);border:1.5px solid var(--primary);}
+  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .dot.green{background:var(--green);animation:pulse 1.5s infinite;}
+  .dot.red{background:var(--primary);}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+  .admin-save-btn{background:var(--admin);color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;width:100%;margin-top:4px;letter-spacing:0.5px;}
+  .admin-save-btn:disabled{opacity:0.5;}
+
+  .admin-logout{background:none;border:1.5px solid rgba(255,255,255,0.4);color:white;border-radius:20px;padding:4px 12px;font-size:12px;font-family:inherit;cursor:pointer;}
+
+  /* ── SUMMARY ── */
   .summary-card{background:var(--card);border-radius:var(--radius);padding:16px;margin-bottom:12px;box-shadow:var(--shadow);border:1px solid var(--border);}
-  .summary-card h3{font-size:15px;font-weight:900;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed var(--border);display:flex;align-items:center;gap:8px;}
+  .summary-card h3{font-size:15px;font-weight:900;margin-bottom:12px;padding-bottom:8px;border-bottom:2px dashed var(--border);display:flex;align-items:center;gap:6px;}
   .order-row{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px solid #F5EDE0;font-size:14px;gap:8px;}
   .order-row:last-child{border-bottom:none;}
   .order-name{flex:1;font-weight:500;}
-  .order-person{font-size:12px;color:var(--text3);}
+  .order-person{font-size:11px;color:var(--text3);}
   .order-price{font-weight:700;color:var(--accent);white-space:nowrap;}
   .total-row{display:flex;justify-content:space-between;padding-top:10px;margin-top:8px;border-top:2px solid var(--border);font-weight:900;font-size:16px;}
   .total-amount{color:var(--primary);}
   .empty-state{text-align:center;color:var(--text3);padding:40px 20px;font-size:14px;}
-  .empty-state .emoji{font-size:40px;display:block;margin-bottom:10px;}
+  .empty-state .emoji{font-size:44px;display:block;margin-bottom:12px;}
+
+  /* ── CART ── */
   .cart-bar{position:fixed;bottom:0;left:0;right:0;background:var(--primary);color:white;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 -4px 20px rgba(0,0,0,0.15);z-index:100;}
   .cart-info{font-size:13px;opacity:0.9;}
   .cart-total{font-size:18px;font-weight:900;}
   .cart-submit{background:white;color:var(--primary);border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:900;font-family:inherit;cursor:pointer;}
+  .cart-submit:disabled{opacity:0.5;}
+
+  /* ── CONFIRM ── */
   .confirm-modal{max-width:400px;text-align:left;max-height:80vh;overflow-y:auto;}
   .confirm-modal h2{text-align:center;font-size:18px;margin-bottom:16px;}
   .confirm-item{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;}
   .confirm-total{display:flex;justify-content:space-between;font-size:16px;font-weight:900;padding-top:12px;}
   .confirm-total .price{color:var(--primary);}
   .btn-row{display:flex;gap:10px;margin-top:20px;}
-  .btn-secondary{flex:1;background:var(--bg);color:var(--text);border:2px solid var(--border);border-radius:10px;padding:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;}
-  .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--green);color:white;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:700;z-index:300;transition:transform 0.3s ease;white-space:nowrap;}
+
+  /* ── TOAST ── */
+  .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#2C3E50;color:white;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:700;z-index:300;transition:transform 0.3s;white-space:nowrap;}
   .toast.show{transform:translateX(-50%) translateY(0);}
-  .admin-toggle{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:var(--radius);padding:12px 16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--border);}
-  .admin-toggle label{font-size:13px;font-weight:700;flex:1;}
-  .toggle-switch{position:relative;width:44px;height:24px;}
-  .toggle-switch input{display:none;}
-  .slider{position:absolute;inset:0;background:#ccc;border-radius:24px;cursor:pointer;transition:0.3s;}
-  .slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:0.3s;}
-  .toggle-switch input:checked+.slider{background:var(--primary);}
-  .toggle-switch input:checked+.slider::before{transform:translateX(20px);}
-  .sync-bar{font-size:11px;text-align:right;padding:3px 16px 0;height:18px;}
-  .sync-bar.ok{color:var(--green);}
-  .sync-bar.syncing{color:var(--accent);}
-  .sync-bar.err{color:var(--primary);}
+
+  /* ── MISC ── */
   .loading{text-align:center;padding:30px;color:var(--text3);}
-  .spinner{display:inline-block;width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}
+  .spinner{display:inline-block;width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}
   @keyframes spin{to{transform:rotate(360deg);}}
+  .divider{border:none;border-top:1px dashed var(--border);margin:16px 0;}
+  .export-btn{background:var(--primary);color:white;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:900;font-family:inherit;cursor:pointer;width:100%;margin-bottom:14px;}
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast"></div>
 
-<!-- Name Modal -->
+<!-- ── NAME MODAL ── -->
 <div class="modal-overlay show" id="nameModal">
   <div class="modal">
     <h2>👋 你好！</h2>
     <p>請輸入你的姓名，方便統計訂單</p>
-    <input type="text" id="nameInput" placeholder="例：小明" maxlength="10"
-      onkeydown="if(event.key==='Enter')setName()" />
+    <input type="text" id="nameInput" placeholder="例：小明" maxlength="10" onkeydown="if(event.key==='Enter')setName()"/>
     <button class="btn-primary" onclick="setName()">開始點餐 →</button>
+    <button class="btn-admin" onclick="showAdminLogin()">👑 我是負責人</button>
   </div>
 </div>
 
-<!-- Confirm Modal -->
+<!-- ── ADMIN LOGIN MODAL ── -->
+<div class="modal-overlay" id="adminLoginModal">
+  <div class="modal">
+    <h2>👑 負責人登入</h2>
+    <p>請輸入管理密碼</p>
+    <input type="password" id="adminPwInput" placeholder="輸入密碼" onkeydown="if(event.key==='Enter')checkAdminPw()"/>
+    <button class="btn-admin" onclick="checkAdminPw()">登入管理模式</button>
+    <button class="btn-secondary" style="width:100%;margin-top:10px" onclick="hideAdminLogin()">← 返回</button>
+  </div>
+</div>
+
+<!-- ── CONFIRM ORDER MODAL ── -->
 <div class="modal-overlay" id="confirmModal">
   <div class="modal confirm-modal">
     <h2>📋 確認訂單</h2>
     <div id="confirmContent"></div>
     <div class="btn-row">
-      <button class="btn-secondary" onclick="closeConfirm()">修改</button>
+      <button class="btn-secondary" style="flex:1" onclick="closeConfirm()">修改</button>
       <button class="btn-primary" id="submitBtn" onclick="submitOrder()" style="flex:2">確認送出</button>
     </div>
   </div>
 </div>
 
-<!-- Header -->
-<div class="header">
+<!-- ── HEADER ── -->
+<div class="header" id="mainHeader">
   <div class="header-top">
     <div>
       <h1>🍱 公司午餐點餐</h1>
       <div class="date" id="headerDate"></div>
     </div>
-    <div class="my-name-badge" id="nameBadge" onclick="changeName()">點我設定姓名</div>
+    <div id="headerRight"></div>
   </div>
 </div>
 <div class="sync-bar" id="syncBar"></div>
 
-<!-- Tabs -->
-<div class="tabs">
+<!-- ── TABS ── -->
+<div class="tabs" id="mainTabs">
   <div class="tab active" id="tab-food" onclick="switchTab('food')">🍜 主食</div>
   <div class="tab" id="tab-drink" onclick="switchTab('drink')">🧋 飲料</div>
   <div class="tab" id="tab-summary" onclick="switchTab('summary')">📋 統計<span class="badge" id="orderBadge" style="display:none">0</span></div>
+  <div class="tab admin-tab" id="tab-admin" style="display:none" onclick="switchTab('admin')">⚙️ 管理</div>
 </div>
 
-<!-- FOOD -->
+<!-- ── FOOD SECTION ── -->
 <div class="section active" id="sec-food">
-  <div class="store-selector">
-    <h3>今日主食店家</h3>
-    <div class="store-grid">
-      <button class="store-btn active" onclick="selectFoodStore('小紅堂')" id="fs-小紅堂"><span class="emoji">🥩</span>小紅堂</button>
-      <button class="store-btn" onclick="selectFoodStore('有餘')" id="fs-有餘"><span class="emoji">🐟</span>有餘</button>
-      <button class="store-btn" onclick="selectFoodStore('鄉寓')" id="fs-鄉寓"><span class="emoji">🍛</span>鄉寓</button>
-    </div>
-  </div>
-  <div id="foodMenu"></div>
-  <div class="remark-row">
-    <label>📝 備註（加麵、少辣等）</label>
-    <input type="text" id="foodRemark" placeholder="例：麵條換手工麵、不要辣" />
-  </div>
+  <div id="foodContent"></div>
 </div>
 
-<!-- DRINK -->
+<!-- ── DRINK SECTION ── -->
 <div class="section" id="sec-drink">
-  <div class="store-selector">
-    <h3>今日飲料店家</h3>
-    <div class="store-grid">
-      <button class="store-btn active" onclick="selectDrinkStore('可不可')" id="ds-可不可"><span class="emoji">☕</span>可不可</button>
-      <button class="store-btn" onclick="selectDrinkStore('老賴')" id="ds-老賴"><span class="emoji">🍹</span>老賴</button>
-      <button class="store-btn" onclick="selectDrinkStore('得正')" id="ds-得正"><span class="emoji">🍵</span>得正</button>
-    </div>
-  </div>
-  <div id="drinkMenu"></div>
-  <div class="remark-row">
-    <label>📝 飲料備註（甜度、冰量）</label>
-    <input type="text" id="drinkRemark" placeholder="例：少糖少冰、無糖去冰" />
-  </div>
+  <div id="drinkContent"></div>
 </div>
 
-<!-- SUMMARY -->
+<!-- ── SUMMARY SECTION ── -->
 <div class="section" id="sec-summary">
-  <div class="admin-toggle">
-    <label>👑 我是今日負責人（查看全員訂單）</label>
-    <label class="toggle-switch">
-      <input type="checkbox" id="adminToggle" onchange="renderSummary()">
-      <span class="slider"></span>
-    </label>
-  </div>
   <div id="summaryContent"><div class="loading"><span class="spinner"></span>載入中...</div></div>
 </div>
 
-<!-- Cart Bar -->
+<!-- ── ADMIN SECTION ── -->
+<div class="section" id="sec-admin">
+  <div class="admin-card">
+    <h3>📢 點餐狀態</h3>
+    <div id="currentStatusBadge"></div>
+    <div class="status-control">
+      <div class="status-label">
+        <div class="title">開放同仁點餐</div>
+        <div class="desc" id="statusDesc">關閉時同仁無法點餐</div>
+      </div>
+      <label class="big-toggle">
+        <input type="checkbox" id="orderStatusToggle" onchange="updateStatusDesc()">
+        <span class="big-slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3>🍜 選擇今日主食店家</h3>
+    <div class="store-grid">
+      <button class="store-btn" onclick="adminSelectFood('小紅堂')" id="afs-小紅堂"><span class="emoji">🥩</span>小紅堂</button>
+      <button class="store-btn" onclick="adminSelectFood('有餘')" id="afs-有餘"><span class="emoji">🐟</span>有餘</button>
+      <button class="store-btn" onclick="adminSelectFood('鄉寓')" id="afs-鄉寓"><span class="emoji">🍛</span>鄉寓</button>
+    </div>
+  </div>
+
+  <div class="admin-card">
+    <h3>🧋 選擇今日飲料店家</h3>
+    <div class="store-grid">
+      <button class="store-btn" onclick="adminSelectDrink('可不可')" id="ads-可不可"><span class="emoji">☕</span>可不可</button>
+      <button class="store-btn" onclick="adminSelectDrink('老賴')" id="ads-老賴"><span class="emoji">🍹</span>老賴</button>
+      <button class="store-btn" onclick="adminSelectDrink('得正')" id="ads-得正"><span class="emoji">🍵</span>得正</button>
+    </div>
+  </div>
+
+  <button class="admin-save-btn" id="adminSaveBtn" onclick="saveAdminSettings()">💾 儲存設定並通知同仁</button>
+
+  <hr class="divider">
+
+  <div class="admin-card">
+    <h3>📋 全員訂單彙整</h3>
+    <div id="adminSummaryContent"><div class="loading"><span class="spinner"></span>載入中...</div></div>
+  </div>
+</div>
+
+<!-- ── CART BAR ── -->
 <div class="cart-bar" id="cartBar" style="display:none">
   <div>
     <div class="cart-info" id="cartInfo"></div>
@@ -199,11 +288,18 @@
 
 <script>
 // ══════════════════════════════════════════
-// FIREBASE
+// CONFIG
 // ══════════════════════════════════════════
 const DB = 'https://company-lunch-33c07-default-rtdb.asia-southeast1.firebasedatabase.app';
-const TODAY = (() => { const d=new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`; })();
+const ADMIN_PASSWORD = '6904';
+const TODAY = (() => {
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+})();
 
+// ══════════════════════════════════════════
+// FIREBASE
+// ══════════════════════════════════════════
 async function fbGet(path) {
   const r = await fetch(`${DB}/${path}.json`);
   if (!r.ok) throw new Error('fbGet fail');
@@ -216,15 +312,26 @@ async function fbSet(path, data) {
   if (!r.ok) throw new Error('fbSet fail');
   return r.json();
 }
-let _es = null;
-function fbListen(path, cb) {
-  if (_es) _es.close();
-  _es = new EventSource(`${DB}/${path}.json`);
-  _es.addEventListener('put', e => { try { cb(JSON.parse(e.data).data); } catch(_){} });
-  _es.addEventListener('patch', e => {
-    try { const p=JSON.parse(e.data).data; Object.assign(allOrders,p); cb(allOrders); } catch(_){}
+async function fbPatch(path, data) {
+  const r = await fetch(`${DB}/${path}.json`, {
+    method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
   });
-  _es.onerror = () => setSyncBar('err','⚠️ 連線中斷，請重新整理頁面');
+  if (!r.ok) throw new Error('fbPatch fail');
+  return r.json();
+}
+let _esOrders = null, _esConfig = null;
+function fbListenOrders(cb) {
+  if (_esOrders) _esOrders.close();
+  _esOrders = new EventSource(`${DB}/orders/${TODAY}.json`);
+  _esOrders.addEventListener('put', e => { try { allOrders = JSON.parse(e.data).data || {}; cb(allOrders); } catch(_){} });
+  _esOrders.addEventListener('patch', e => { try { const p=JSON.parse(e.data).data; Object.assign(allOrders,p); cb(allOrders); } catch(_){} });
+  _esOrders.onerror = () => setSyncBar('err','⚠️ 連線中斷，請重新整理');
+}
+function fbListenConfig(cb) {
+  if (_esConfig) _esConfig.close();
+  _esConfig = new EventSource(`${DB}/config/${TODAY}.json`);
+  _esConfig.addEventListener('put', e => { try { const d=JSON.parse(e.data).data; if(d) { todayConfig=d; cb(d); } } catch(_){} });
+  _esConfig.addEventListener('patch', e => { try { const p=JSON.parse(e.data).data; Object.assign(todayConfig,p); cb(todayConfig); } catch(_){} });
 }
 
 // ══════════════════════════════════════════
@@ -232,49 +339,20 @@ function fbListen(path, cb) {
 // ══════════════════════════════════════════
 const FM = {
   '小紅堂':[
-    {cat:'乾麵',items:[
-      {n:'大四喜牛肉拌麵',p:200},{n:'三寶牛肉拌麵',p:160},{n:'牛雜拌麵',p:130},
-      {n:'帶筋牛肉拌麵',p:120},{n:'牛肉拌麵',p:100},{n:'豬肉拌麵',p:90},
-      {n:'炸醬麵',p:65},{n:'全牛肚拌麵',p:150},{n:'全牛筋拌麵',p:150},
-      {n:'牛油拌麵（無肉）',p:60},{n:'豬油拌麵（無肉）',p:50}]},
-    {cat:'湯麵',items:[
-      {n:'大四喜牛肉麵',p:210},{n:'三寶牛肉麵',p:170},{n:'清燉牛雜麵',p:140},
-      {n:'帶筋牛肉麵',p:130},{n:'清燉牛肉麵',p:110},{n:'紅燒牛肉麵',p:110},
-      {n:'清燉豬肉麵',p:90},{n:'全牛肚麵',p:160},{n:'全牛筋麵',p:160},
-      {n:'牛肉湯麵（無肉）',p:70},{n:'豬肉湯麵（無肉）',p:60}]},
-    {cat:'湯（無麵）',items:[
-      {n:'清燉牛肉湯',p:90},{n:'紅燒牛肉湯',p:90},{n:'清燉豬肉湯',p:70},
-      {n:'帶筋牛肉湯',p:110},{n:'清燉牛雜湯',p:120},{n:'全牛肚湯',p:140},
-      {n:'全牛筋湯',p:140},{n:'三寶牛肉湯',p:150},{n:'大四喜牛肉湯',p:190}]},
-    {cat:'滷味＆小菜',items:[
-      {n:'紅燒牛筋',p:70},{n:'紅燒牛腱',p:70},{n:'紅燒牛肚',p:70},
-      {n:'清燙牛雜',p:70},{n:'滷豬腱',p:60},{n:'皮蛋豆腐',p:40},{n:'原味奶酪',p:40}]}
+    {cat:'乾麵',items:[{n:'大四喜牛肉拌麵',p:200},{n:'三寶牛肉拌麵',p:160},{n:'牛雜拌麵',p:130},{n:'帶筋牛肉拌麵',p:120},{n:'牛肉拌麵',p:100},{n:'豬肉拌麵',p:90},{n:'炸醬麵',p:65},{n:'全牛肚拌麵',p:150},{n:'全牛筋拌麵',p:150},{n:'牛油拌麵（無肉）',p:60},{n:'豬油拌麵（無肉）',p:50}]},
+    {cat:'湯麵',items:[{n:'大四喜牛肉麵',p:210},{n:'三寶牛肉麵',p:170},{n:'清燉牛雜麵',p:140},{n:'帶筋牛肉麵',p:130},{n:'清燉牛肉麵',p:110},{n:'紅燒牛肉麵',p:110},{n:'清燉豬肉麵',p:90},{n:'全牛肚麵',p:160},{n:'全牛筋麵',p:160},{n:'牛肉湯麵（無肉）',p:70},{n:'豬肉湯麵（無肉）',p:60}]},
+    {cat:'湯（無麵）',items:[{n:'清燉牛肉湯',p:90},{n:'紅燒牛肉湯',p:90},{n:'清燉豬肉湯',p:70},{n:'帶筋牛肉湯',p:110},{n:'清燉牛雜湯',p:120},{n:'全牛肚湯',p:140},{n:'全牛筋湯',p:140},{n:'三寶牛肉湯',p:150},{n:'大四喜牛肉湯',p:190}]},
+    {cat:'滷味＆小菜',items:[{n:'紅燒牛筋',p:70},{n:'紅燒牛腱',p:70},{n:'紅燒牛肚',p:70},{n:'清燙牛雜',p:70},{n:'滷豬腱',p:60},{n:'皮蛋豆腐',p:40},{n:'原味奶酪',p:40}]}
   ],
   '有餘':[
-    {cat:'紅燒土魠魚',items:[
-      {n:'乾魚塊（大）',p:100},{n:'魚羹（大）',p:90},{n:'魚羹（小）',p:70},
-      {n:'麵羹（大）',p:90},{n:'麵羹（小）',p:70},{n:'意麵羹（大）',p:90},{n:'意麵羹（小）',p:70},
-      {n:'飯羹（大）',p:90},{n:'飯羹（小）',p:70},{n:'米粉羹（大）',p:90},{n:'米粉羹（小）',p:70},
-      {n:'綜合麵羹（大）',p:90},{n:'綜合麵羹（小）',p:70},{n:'乾麵（大）',p:90},{n:'乾麵（小）',p:70}]},
-    {cat:'魷魚',items:[
-      {n:'魷魚羹（大）',p:90},{n:'魷魚羹（小）',p:70},{n:'魷魚麵羹（大）',p:90},{n:'魷魚麵羹（小）',p:70},
-      {n:'魷魚意麵羹（大）',p:90},{n:'魷魚意麵羹（小）',p:70},{n:'魷魚飯羹（大）',p:90},{n:'魷魚飯羹（小）',p:70},
-      {n:'魷魚米粉羹（大）',p:90},{n:'魷魚米粉羹（小）',p:70},{n:'魷魚綜合麵羹（大）',p:90},{n:'魷魚綜合麵羹（小）',p:70}]},
-    {cat:'其他',items:[
-      {n:'乾意麵（大）',p:60},{n:'乾意麵（小）',p:40},{n:'清羹',p:30},
-      {n:'清羹麵米粉飯（大）',p:60},{n:'清羹麵米粉飯（小）',p:45},
-      {n:'肉燥飯（大）',p:40},{n:'肉燥飯（小）',p:25},
-      {n:'精緻小菜',p:40},{n:'燙青菜',p:35},{n:'滷蛋',p:10}]}
+    {cat:'紅燒土魠魚',items:[{n:'乾魚塊（大）',p:100},{n:'魚羹（大）',p:90},{n:'魚羹（小）',p:70},{n:'麵羹（大）',p:90},{n:'麵羹（小）',p:70},{n:'意麵羹（大）',p:90},{n:'意麵羹（小）',p:70},{n:'飯羹（大）',p:90},{n:'飯羹（小）',p:70},{n:'米粉羹（大）',p:90},{n:'米粉羹（小）',p:70},{n:'綜合麵羹（大）',p:90},{n:'綜合麵羹（小）',p:70},{n:'乾麵（大）',p:90},{n:'乾麵（小）',p:70}]},
+    {cat:'魷魚',items:[{n:'魷魚羹（大）',p:90},{n:'魷魚羹（小）',p:70},{n:'魷魚麵羹（大）',p:90},{n:'魷魚麵羹（小）',p:70},{n:'魷魚意麵羹（大）',p:90},{n:'魷魚意麵羹（小）',p:70},{n:'魷魚飯羹（大）',p:90},{n:'魷魚飯羹（小）',p:70},{n:'魷魚米粉羹（大）',p:90},{n:'魷魚米粉羹（小）',p:70},{n:'魷魚綜合麵羹（大）',p:90},{n:'魷魚綜合麵羹（小）',p:70}]},
+    {cat:'其他',items:[{n:'乾意麵（大）',p:60},{n:'乾意麵（小）',p:40},{n:'清羹',p:30},{n:'清羹麵米粉飯（大）',p:60},{n:'清羹麵米粉飯（小）',p:45},{n:'肉燥飯（大）',p:40},{n:'肉燥飯（小）',p:25},{n:'精緻小菜',p:40},{n:'燙青菜',p:35},{n:'滷蛋',p:10}]}
   ],
   '鄉寓':[
-    {cat:'咖哩飯',items:[
-      {n:'蛋包咖哩',p:90},{n:'和風唐揚雞咖哩',p:140},{n:'奶油香煎牛咖哩',p:150},
-      {n:'厚切豬排咖哩',p:165},{n:'酥炸海老咖哩',p:170},{n:'加飯',p:15},{n:'加咖哩',p:35}]},
-    {cat:'丼飯',items:[
-      {n:'燒肉丼',p:110},{n:'醬爆牛肉丼',p:125},{n:'和風唐揚雞丼',p:125},
-      {n:'厚切豬排丼',p:145},{n:'酥炸海老丼',p:150},{n:'加飯',p:15}]},
-    {cat:'烏龍麵',items:[
-      {n:'炒烏龍',p:110},{n:'咖哩烏龍（豬）',p:125},{n:'咖哩烏龍（牛）',p:135}]}
+    {cat:'咖哩飯',items:[{n:'蛋包咖哩',p:90},{n:'和風唐揚雞咖哩',p:140},{n:'奶油香煎牛咖哩',p:150},{n:'厚切豬排咖哩',p:165},{n:'酥炸海老咖哩',p:170},{n:'加飯',p:15},{n:'加咖哩',p:35}]},
+    {cat:'丼飯',items:[{n:'燒肉丼',p:110},{n:'醬爆牛肉丼',p:125},{n:'和風唐揚雞丼',p:125},{n:'厚切豬排丼',p:145},{n:'酥炸海老丼',p:150},{n:'加飯',p:15}]},
+    {cat:'烏龍麵',items:[{n:'炒烏龍',p:110},{n:'咖哩烏龍（豬）',p:125},{n:'咖哩烏龍（牛）',p:135}]}
   ]
 };
 const DM = {
@@ -311,103 +389,152 @@ const DM = {
 // ══════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════
-let myName = localStorage.getItem('lunchName')||'';
-let curFS = '小紅堂', curDS = '可不可';
+let myName = localStorage.getItem('lunchName') || '';
+let isAdmin = false;
+let curTab = 'food';
 let myFood = {}, myDrink = {};
 let allOrders = {};
-let curTab = 'food';
+let todayConfig = { foodStore: null, drinkStore: null, isOpen: false };
+// Admin draft (before saving)
+let adminDraftFood = null, adminDraftDrink = null;
 
-function setSyncBar(type,msg){const e=document.getElementById('syncBar');e.className='sync-bar '+type;e.textContent=msg;}
+function setSyncBar(t,m){ const e=document.getElementById('syncBar'); e.className='sync-bar '+t; e.textContent=m; }
 
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
-document.addEventListener('DOMContentLoaded',()=>{
-  const now=new Date(); const days=['日','一','二','三','四','五','六'];
-  document.getElementById('headerDate').textContent=`${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
-  if(myName){
+document.addEventListener('DOMContentLoaded', () => {
+  const now = new Date(); const days=['日','一','二','三','四','五','六'];
+  document.getElementById('headerDate').textContent = `${now.getMonth()+1}/${now.getDate()}（${days[now.getDay()]}）`;
+  if (myName) {
     document.getElementById('nameModal').classList.remove('show');
-    document.getElementById('nameBadge').textContent=`👤 ${myName}`;
-    startListen();
+    renderHeaderRight();
+    startListening();
   }
-  renderFM(); renderDM();
 });
 
-function startListen(){
+function startListening() {
   setSyncBar('syncing','⟳ 連線中...');
-  fbListen(`orders/${TODAY}`, data=>{
-    allOrders = data||{};
+  fbListenConfig(cfg => {
+    todayConfig = cfg || { foodStore: null, drinkStore: null, isOpen: false };
     setSyncBar('ok','✓ 即時同步中');
+    renderFoodSection();
+    renderDrinkSection();
+    if (isAdmin) syncAdminUI();
+  });
+  fbListenOrders(orders => {
+    allOrders = orders || {};
     updateBadge();
-    const key=myName.replace(/[.#$\/\[\]]/g,'_');
-    const me=allOrders[key];
-    if(me){
-      myFood=me.food||{}; myDrink=me.drink||{};
-      curFS=me.foodStore||'小紅堂'; curDS=me.drinkStore||'可不可';
-      document.getElementById('foodRemark').value=me.foodRemark||'';
-      document.getElementById('drinkRemark').value=me.drinkRemark||'';
-      syncStoreUI();
-      renderFM(); renderDM(); updateCart();
+    if (curTab === 'summary') renderSummary();
+    if (isAdmin) renderAdminSummary();
+    // restore my order
+    const key = nameKey(myName);
+    const me = allOrders[key];
+    if (me && me.foodStore === todayConfig.foodStore) {
+      myFood = me.food || {};
+      myDrink = me.drink || {};
+      document.getElementById('foodRemark') && (document.getElementById('foodRemark').value = me.foodRemark || '');
+      document.getElementById('drinkRemark') && (document.getElementById('drinkRemark').value = me.drinkRemark || '');
     }
-    if(curTab==='summary') renderSummary();
+    updateCart();
   });
 }
 
-function syncStoreUI(){
-  document.querySelectorAll('[id^="fs-"]').forEach(b=>b.classList.remove('active'));
-  const fb=document.getElementById(`fs-${curFS}`); if(fb) fb.classList.add('active');
-  document.querySelectorAll('[id^="ds-"]').forEach(b=>b.classList.remove('active'));
-  const db=document.getElementById(`ds-${curDS}`); if(db) db.classList.add('active');
+// ══════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════
+function showAdminLogin() { document.getElementById('adminLoginModal').classList.add('show'); setTimeout(()=>document.getElementById('adminPwInput').focus(),100); }
+function hideAdminLogin() { document.getElementById('adminLoginModal').classList.remove('show'); document.getElementById('adminPwInput').value=''; }
+
+function checkAdminPw() {
+  const pw = document.getElementById('adminPwInput').value;
+  if (pw === ADMIN_PASSWORD) {
+    isAdmin = true;
+    hideAdminLogin();
+    document.getElementById('nameModal').classList.remove('show');
+    if (!myName) { myName = '負責人'; localStorage.setItem('lunchName','負責人'); }
+    renderHeaderRight();
+    document.getElementById('mainHeader').classList.add('admin-mode');
+    document.getElementById('tab-admin').style.display = '';
+    startListening();
+    switchTab('admin');
+    showToast('👑 已進入管理模式');
+  } else {
+    document.getElementById('adminPwInput').style.borderColor = 'red';
+    document.getElementById('adminPwInput').value = '';
+    document.getElementById('adminPwInput').placeholder = '❌ 密碼錯誤，請再試';
+  }
 }
 
-function setName(){
-  const v=document.getElementById('nameInput').value.trim();
-  if(!v){document.getElementById('nameInput').style.borderColor='red';return;}
-  myName=v; localStorage.setItem('lunchName',v);
-  document.getElementById('nameModal').classList.remove('show');
-  document.getElementById('nameBadge').textContent=`👤 ${myName}`;
-  startListen();
+function adminLogout() {
+  isAdmin = false;
+  document.getElementById('mainHeader').classList.remove('admin-mode');
+  document.getElementById('tab-admin').style.display = 'none';
+  switchTab('food');
+  renderHeaderRight();
+  showToast('已退出管理模式');
 }
-function changeName(){ document.getElementById('nameInput').value=myName; document.getElementById('nameModal').classList.add('show'); }
+
+function setName() {
+  const v = document.getElementById('nameInput').value.trim();
+  if (!v) { document.getElementById('nameInput').style.borderColor='red'; return; }
+  myName = v; localStorage.setItem('lunchName', v);
+  document.getElementById('nameModal').classList.remove('show');
+  renderHeaderRight();
+  startListening();
+}
+function changeName() {
+  if (isAdmin) return;
+  document.getElementById('nameInput').value = myName;
+  document.getElementById('nameModal').classList.add('show');
+}
+
+function renderHeaderRight() {
+  const el = document.getElementById('headerRight');
+  if (isAdmin) {
+    el.innerHTML = `<button class="admin-logout" onclick="adminLogout()">退出管理</button>`;
+  } else {
+    el.innerHTML = `<div class="name-badge" onclick="changeName()">👤 ${myName}</div>`;
+  }
+}
+
+const nameKey = n => (n||'').replace(/[.#$\/\[\]]/g,'_');
 
 // ══════════════════════════════════════════
 // TABS
 // ══════════════════════════════════════════
-function switchTab(t){
-  curTab=t;
-  ['food','drink','summary'].forEach(x=>{
-    document.getElementById(`tab-${x}`).classList.toggle('active',x===t);
-    document.getElementById(`sec-${x}`).classList.toggle('active',x===t);
+function switchTab(t) {
+  curTab = t;
+  const allTabs = ['food','drink','summary','admin'];
+  allTabs.forEach(x => {
+    const tb = document.getElementById(`tab-${x}`); if (!tb) return;
+    tb.classList.toggle('active', x===t);
+    const sec = document.getElementById(`sec-${x}`); if (!sec) return;
+    sec.classList.toggle('active', x===t);
   });
-  if(t==='summary'){renderSummary();document.getElementById('cartBar').style.display='none';}
-  else updateCart();
+  document.getElementById('cartBar').style.display = 'none';
+  if (t==='food' || t==='drink') updateCart();
+  if (t==='summary') renderSummary();
+  if (t==='admin') { syncAdminUI(); renderAdminSummary(); }
 }
 
 // ══════════════════════════════════════════
-// STORE
+// FOOD / DRINK SECTION RENDERING
 // ══════════════════════════════════════════
-function selectFoodStore(n,re=true){
-  curFS=n; document.querySelectorAll('[id^="fs-"]').forEach(b=>b.classList.remove('active'));
-  document.getElementById(`fs-${n}`).classList.add('active');
-  if(re){myFood={};renderFM();updateCart();}
-}
-function selectDrinkStore(n,re=true){
-  curDS=n; document.querySelectorAll('[id^="ds-"]').forEach(b=>b.classList.remove('active'));
-  document.getElementById(`ds-${n}`).classList.add('active');
-  if(re){myDrink={};renderDM();updateCart();}
-}
-
-// ══════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════
-const esc=s=>s.replace(/'/g,"\\'");
-function renderFM(){
-  let h='';
-  FM[curFS].forEach(cat=>{
-    h+=`<div class="category-title">🍜 ${cat.cat}</div>`;
-    cat.items.forEach(i=>{
-      const q=myFood[i.n]||0;
-      h+=`<div class="menu-item ${q>0?'selected':''}">
+function renderFoodSection() {
+  const container = document.getElementById('foodContent');
+  const store = todayConfig.foodStore;
+  const isOpen = todayConfig.isOpen;
+  if (!store || !isOpen) {
+    container.innerHTML = waitingHTML('food', store);
+    return;
+  }
+  let h = `<div class="store-info-bar"><div><div class="label">今日主食</div><div class="name">🥩 ${store}</div></div></div>`;
+  FM[store].forEach(cat => {
+    h += `<div class="category-title">🍜 ${cat.cat}</div>`;
+    cat.items.forEach(i => {
+      const q = myFood[i.n]||0;
+      h += `<div class="menu-item ${q>0?'selected':''}">
         <div class="item-info"><div class="item-name">${i.n}</div><div class="item-price">$${i.p}</div></div>
         <div class="qty-control">
           <button class="qty-btn" onclick="chgF('${esc(i.n)}',${i.p},-1)" ${q===0?'style="opacity:.3"':''}>−</button>
@@ -416,19 +543,28 @@ function renderFM(){
         </div></div>`;
     });
   });
-  document.getElementById('foodMenu').innerHTML=h;
+  h += `<div class="remark-row"><label>📝 備註（加麵、少辣等）</label><input type="text" id="foodRemark" placeholder="例：麵條換手工麵、不要辣"/></div>`;
+  container.innerHTML = h;
 }
-function renderDM(){
-  let h='';
-  DM[curDS].forEach(cat=>{
-    h+=`<div class="category-title">🧋 ${cat.cat}</div>`;
-    cat.items.forEach(i=>{
+
+function renderDrinkSection() {
+  const container = document.getElementById('drinkContent');
+  const store = todayConfig.drinkStore;
+  const isOpen = todayConfig.isOpen;
+  if (!store || !isOpen) {
+    container.innerHTML = waitingHTML('drink', store);
+    return;
+  }
+  let h = `<div class="store-info-bar"><div><div class="label">今日飲料</div><div class="name">🧋 ${store}</div></div></div>`;
+  DM[store].forEach(cat => {
+    h += `<div class="category-title">🧋 ${cat.cat}</div>`;
+    cat.items.forEach(i => {
       const ord=myDrink[i.n]; const q=ord?ord.qty:0;
       const sk=Object.keys(i.s||{}); const cs=ord?ord.size:(sk[0]||'');
       const pr=i.p||(i.s?.[cs]||i.s?.[sk[0]]||0);
       let sp='';
       if(sk.length>1) sp=`<div class="size-picker">`+sk.map(k=>`<button class="size-btn ${cs===k?'active':''}" onclick="setDS('${esc(i.n)}','${k}',${i.s[k]})">${k} $${i.s[k]}</button>`).join('')+`</div>`;
-      h+=`<div class="menu-item ${q>0?'selected':''}">
+      h += `<div class="menu-item ${q>0?'selected':''}">
         <div class="item-info"><div class="item-name">${i.n}</div><div class="item-price">$${pr}</div>${sp}</div>
         <div class="qty-control">
           <button class="qty-btn" onclick="chgD('${esc(i.n)}',-1)" ${q===0?'style="opacity:.3"':''}>−</button>
@@ -437,18 +573,52 @@ function renderDM(){
         </div></div>`;
     });
   });
-  document.getElementById('drinkMenu').innerHTML=h;
+  h += `<div class="remark-row"><label>📝 飲料備註（甜度、冰量）</label><input type="text" id="drinkRemark" placeholder="例：少糖少冰、無糖去冰"/></div>`;
+  container.innerHTML = h;
 }
 
-function chgF(n,p,d){ const q=Math.max(0,(myFood[n]||0)+d); if(q===0) delete myFood[n]; else myFood[n]=q; renderFM();updateCart(); }
-function setDS(n,sk,pr){ if(!myDrink[n]) myDrink[n]={qty:0,size:sk,price:pr}; else{myDrink[n].size=sk;myDrink[n].price=pr;} renderDM();updateCart(); }
+function waitingHTML(type, store) {
+  if (!todayConfig.foodStore && !todayConfig.drinkStore) {
+    return `<div class="waiting-screen">
+      <span class="big-emoji">⏳</span>
+      <h2>等待負責人設定</h2>
+      <p>負責人尚未設定今日店家<br>請稍候，設定後頁面會自動更新</p>
+    </div>`;
+  }
+  if (store && !todayConfig.isOpen) {
+    return `<div class="waiting-screen">
+      <span class="big-emoji">🔒</span>
+      <h2>點餐尚未開放</h2>
+      <p>負責人已選好今日店家<br>等待開放點餐後即可點選</p>
+      <div class="today-stores">
+        ${todayConfig.foodStore?`<div class="store-badge food">🥩 ${todayConfig.foodStore}</div>`:''}
+        ${todayConfig.drinkStore?`<div class="store-badge drink">🧋 ${todayConfig.drinkStore}</div>`:''}
+      </div>
+    </div>`;
+  }
+  if (!store) {
+    return `<div class="waiting-screen">
+      <span class="big-emoji">⏳</span>
+      <h2>等待負責人設定</h2>
+      <p>請稍候，設定後頁面會自動更新</p>
+    </div>`;
+  }
+  return '';
+}
+
+// ══════════════════════════════════════════
+// MENU INTERACTIONS
+// ══════════════════════════════════════════
+const esc = s => s.replace(/'/g,"\\'");
+function chgF(n,p,d){ const q=Math.max(0,(myFood[n]||0)+d); if(q===0) delete myFood[n]; else myFood[n]=q; renderFoodSection(); updateCart(); }
+function setDS(n,sk,pr){ if(!myDrink[n]) myDrink[n]={qty:0,size:sk,price:pr}; else{myDrink[n].size=sk;myDrink[n].price=pr;} renderDrinkSection(); updateCart(); }
 function chgD(n,d){
-  let item; DM[curDS].forEach(c=>c.items.forEach(i=>{if(i.n===n)item=i;})); if(!item) return;
+  let item; DM[todayConfig.drinkStore]?.forEach(c=>c.items.forEach(i=>{if(i.n===n)item=i;})); if(!item) return;
   const cur=myDrink[n]||{qty:0}; const q=Math.max(0,cur.qty+d);
   if(q===0){ delete myDrink[n]; }
   else if(!myDrink[n]){ const sk=Object.keys(item.s||{})[0]||''; myDrink[n]={qty:q,size:sk,price:item.p||item.s?.[sk]||0}; }
   else myDrink[n].qty=q;
-  renderDM();updateCart();
+  renderDrinkSection(); updateCart();
 }
 
 // ══════════════════════════════════════════
@@ -456,15 +626,15 @@ function chgD(n,d){
 // ══════════════════════════════════════════
 function calcTotal(){
   let t=0;
-  FM[curFS].forEach(c=>c.items.forEach(i=>{if(myFood[i.n])t+=i.p*myFood[i.n];}));
+  FM[todayConfig.foodStore]?.forEach(c=>c.items.forEach(i=>{if(myFood[i.n])t+=i.p*myFood[i.n];}));
   Object.values(myDrink).forEach(o=>t+=(o.price||0)*o.qty);
   return t;
 }
 function countItems(){ return Object.values(myFood).reduce((a,b)=>a+b,0)+Object.values(myDrink).reduce((a,b)=>a+b.qty,0); }
 function updateCart(){
-  if(curTab==='summary') return;
+  if(curTab==='summary'||curTab==='admin') return;
   const c=countItems(),t=calcTotal(),bar=document.getElementById('cartBar');
-  if(c>0){ bar.style.display='flex'; document.getElementById('cartInfo').textContent=`已選 ${c} 項`; document.getElementById('cartTotal').textContent=`$${t}`; }
+  if(c>0&&todayConfig.isOpen){ bar.style.display='flex'; document.getElementById('cartInfo').textContent=`已選 ${c} 項`; document.getElementById('cartTotal').textContent=`$${t}`; }
   else bar.style.display='none';
 }
 
@@ -473,9 +643,10 @@ function updateCart(){
 // ══════════════════════════════════════════
 function openConfirm(){
   let h='';
-  FM[curFS].forEach(c=>c.items.forEach(i=>{if(myFood[i.n]) h+=`<div class="confirm-item"><span>🍜 ${i.n} ×${myFood[i.n]}</span><span>$${i.p*myFood[i.n]}</span></div>`;}));
-  Object.entries(myDrink).forEach(([k,o])=>{h+=`<div class="confirm-item"><span>🧋 ${k}${o.size?' ('+o.size+')':''} ×${o.qty}</span><span>$${o.price*o.qty}</span></div>`;});
-  const fr=document.getElementById('foodRemark').value, dr=document.getElementById('drinkRemark').value;
+  FM[todayConfig.foodStore]?.forEach(c=>c.items.forEach(i=>{if(myFood[i.n]) h+=`<div class="confirm-item"><span>🍜 ${i.n} ×${myFood[i.n]}</span><span>$${i.p*myFood[i.n]}</span></div>`;}));
+  Object.entries(myDrink).forEach(([k,o])=>{ h+=`<div class="confirm-item"><span>🧋 ${k}${o.size?' ('+o.size+')':''} ×${o.qty}</span><span>$${o.price*o.qty}</span></div>`; });
+  const fr=document.getElementById('foodRemark')?.value||'';
+  const dr=document.getElementById('drinkRemark')?.value||'';
   if(fr) h+=`<div class="confirm-item" style="color:#888"><span>主食備註</span><span>${fr}</span></div>`;
   if(dr) h+=`<div class="confirm-item" style="color:#888"><span>飲料備註</span><span>${dr}</span></div>`;
   h+=`<div class="confirm-total"><span>合計</span><span class="price">$${calcTotal()}</span></div>`;
@@ -489,17 +660,15 @@ async function submitOrder(){
   setSyncBar('syncing','⟳ 儲存中...');
   try{
     const order={
-      name:myName, foodStore:curFS, drinkStore:curDS,
+      name:myName, foodStore:todayConfig.foodStore, drinkStore:todayConfig.drinkStore,
       food:{...myFood}, drink:JSON.parse(JSON.stringify(myDrink)),
-      foodRemark:document.getElementById('foodRemark').value,
-      drinkRemark:document.getElementById('drinkRemark').value,
-      time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}),
-      ts:Date.now()
+      foodRemark:document.getElementById('foodRemark')?.value||'',
+      drinkRemark:document.getElementById('drinkRemark')?.value||'',
+      time:new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}), ts:Date.now()
     };
-    const key=myName.replace(/[.#$\/\[\]]/g,'_');
-    await fbSet(`orders/${TODAY}/${key}`,order);
-    closeConfirm(); setSyncBar('ok','✓ 訂單已送出'); showToast('✅ 訂單送出成功！'); updateBadge();
-  }catch(e){ setSyncBar('err','⚠️ 送出失敗，請重試'); showToast('❌ 網路錯誤，請再試一次'); }
+    await fbSet(`orders/${TODAY}/${nameKey(myName)}`, order);
+    closeConfirm(); setSyncBar('ok','✓ 已送出'); showToast('✅ 訂單送出成功！'); updateBadge();
+  }catch(e){ setSyncBar('err','⚠️ 送出失敗'); showToast('❌ 網路錯誤，請再試一次'); }
   btn.disabled=false; btn.textContent='確認送出';
 }
 
@@ -507,7 +676,59 @@ function updateBadge(){
   const n=Object.keys(allOrders).length, b=document.getElementById('orderBadge');
   if(n>0){b.style.display='inline';b.textContent=n;}else b.style.display='none';
 }
-function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+// ══════════════════════════════════════════
+// ADMIN UI
+// ══════════════════════════════════════════
+function adminSelectFood(n){
+  adminDraftFood=n;
+  document.querySelectorAll('[id^="afs-"]').forEach(b=>b.classList.remove('active-food'));
+  document.getElementById(`afs-${n}`).classList.add('active-food');
+}
+function adminSelectDrink(n){
+  adminDraftDrink=n;
+  document.querySelectorAll('[id^="ads-"]').forEach(b=>b.classList.remove('active-drink'));
+  document.getElementById(`ads-${n}`).classList.add('active-drink');
+}
+function updateStatusDesc(){
+  const on=document.getElementById('orderStatusToggle').checked;
+  document.getElementById('statusDesc').textContent = on ? '✅ 同仁目前可以點餐' : '🔒 同仁目前無法點餐';
+}
+
+function syncAdminUI(){
+  // sync toggles and store buttons to current config
+  const tog=document.getElementById('orderStatusToggle');
+  tog.checked = todayConfig.isOpen||false;
+  updateStatusDesc();
+  const badge=document.getElementById('currentStatusBadge');
+  badge.innerHTML = todayConfig.isOpen
+    ? `<div class="status-badge open"><span class="dot green"></span>點餐開放中</div>`
+    : `<div class="status-badge closed"><span class="dot red"></span>點餐已關閉</div>`;
+
+  if(todayConfig.foodStore && !adminDraftFood){
+    adminDraftFood=todayConfig.foodStore;
+    document.querySelectorAll('[id^="afs-"]').forEach(b=>b.classList.remove('active-food'));
+    const b=document.getElementById(`afs-${todayConfig.foodStore}`); if(b) b.classList.add('active-food');
+  }
+  if(todayConfig.drinkStore && !adminDraftDrink){
+    adminDraftDrink=todayConfig.drinkStore;
+    document.querySelectorAll('[id^="ads-"]').forEach(b=>b.classList.remove('active-drink'));
+    const b=document.getElementById(`ads-${todayConfig.drinkStore}`); if(b) b.classList.add('active-drink');
+  }
+}
+
+async function saveAdminSettings(){
+  const foodStore = adminDraftFood || todayConfig.foodStore;
+  const drinkStore = adminDraftDrink || todayConfig.drinkStore;
+  if(!foodStore||!drinkStore){ showToast('⚠️ 請先選擇主食和飲料店家'); return; }
+  const isOpen = document.getElementById('orderStatusToggle').checked;
+  const btn=document.getElementById('adminSaveBtn'); btn.disabled=true; btn.textContent='儲存中...';
+  try{
+    await fbSet(`config/${TODAY}`,{foodStore,drinkStore,isOpen,updatedAt:Date.now()});
+    showToast(isOpen ? '✅ 設定已儲存，點餐已開放！' : '✅ 設定已儲存');
+  }catch(e){ showToast('❌ 儲存失敗，請重試'); }
+  btn.disabled=false; btn.textContent='💾 儲存設定並通知同仁';
+}
 
 // ══════════════════════════════════════════
 // SUMMARY
@@ -520,66 +741,69 @@ function personTotal(o){
 }
 
 function renderSummary(){
-  const isAdmin=document.getElementById('adminToggle').checked;
   const orders=Object.values(allOrders||{});
   const container=document.getElementById('summaryContent');
-  if(orders.length===0){ container.innerHTML=`<div class="empty-state"><span class="emoji">🍽️</span>今天還沒有人點餐<br><small>訂單將即時顯示</small></div>`; return; }
-  const myKey=myName.replace(/[.#$\/\[\]]/g,'_');
-  const myOrd=allOrders[myKey];
+  if(orders.length===0){ container.innerHTML=`<div class="empty-state"><span class="emoji">🍽️</span>今天還沒有人點餐</div>`; return; }
+  const myOrd=allOrders[nameKey(myName)];
   let h='';
-
-  // My order card
   if(myOrd){
-    const sub=personTotal(myOrd);
-    h+=`<div class="summary-card"><h3>✅ 我的訂單<span style="font-size:11px;color:var(--text3);margin-left:auto">${myOrd.time}</span></h3>`;
+    h+=`<div class="summary-card"><h3>✅ 我的訂單 <span style="font-size:11px;color:var(--text3);margin-left:auto">${myOrd.time}</span></h3>`;
     FM[myOrd.foodStore]?.forEach(c=>c.items.forEach(i=>{ if(myOrd.food?.[i.n]){ const a=i.p*myOrd.food[i.n]; h+=`<div class="order-row"><span class="order-name">🍜 ${i.n} ×${myOrd.food[i.n]}</span><span class="order-price">$${a}</span></div>`; }}));
-    if(myOrd.foodRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:13px">備註：${myOrd.foodRemark}</span></div>`;
+    if(myOrd.foodRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:12px">備註：${myOrd.foodRemark}</span></div>`;
     Object.entries(myOrd.drink||{}).forEach(([k,o])=>{ const a=o.price*o.qty; h+=`<div class="order-row"><span class="order-name">🧋 ${k}${o.size?' ('+o.size+')':''} ×${o.qty}</span><span class="order-price">$${a}</span></div>`; });
-    if(myOrd.drinkRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:13px">備註：${myOrd.drinkRemark}</span></div>`;
-    h+=`<div class="total-row"><span>個人小計</span><span class="total-amount">$${sub}</span></div></div>`;
+    if(myOrd.drinkRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:12px">備註：${myOrd.drinkRemark}</span></div>`;
+    h+=`<div class="total-row"><span>個人小計</span><span class="total-amount">$${personTotal(myOrd)}</span></div></div>`;
   } else {
     h+=`<div class="empty-state"><span class="emoji">📝</span>你今天還沒點餐！</div>`;
   }
+  h+=`<div class="summary-card"><h3>👥 今日已點餐（${orders.length}人）</h3>`;
+  orders.forEach(o=>{ h+=`<div class="order-row"><span class="order-name">${o.name}</span><span style="font-size:12px;color:var(--text3)">${o.time}</span><span class="order-price">$${personTotal(o)}</span></div>`; });
+  h+=`</div>`;
+  container.innerHTML=h;
+}
 
-  if(!isAdmin){ container.innerHTML=h; return; }
-
-  // Admin: food aggregation
-  [...new Set(orders.map(o=>o.foodStore))].forEach(store=>{
+function renderAdminSummary(){
+  const orders=Object.values(allOrders||{});
+  const container=document.getElementById('adminSummaryContent');
+  if(!container) return;
+  if(orders.length===0){ container.innerHTML=`<div class="empty-state" style="padding:20px"><span class="emoji">🍽️</span>尚無訂單</div>`; return; }
+  let h='';
+  // Food
+  [...new Set(orders.map(o=>o.foodStore).filter(Boolean))].forEach(store=>{
     const so=orders.filter(o=>o.foodStore===store); const agg={};
     so.forEach(o=>Object.entries(o.food||{}).forEach(([k,q])=>{agg[k]=(agg[k]||0)+q;}));
     if(!Object.keys(agg).length) return;
-    h+=`<div class="summary-card"><h3>🍜 ${store} 彙整（${so.length}人）</h3>`;
+    h+=`<div style="font-weight:900;color:var(--primary);margin:10px 0 6px">🍜 ${store}（${so.length}人）</div>`;
     let t=0;
     FM[store]?.forEach(c=>c.items.forEach(i=>{ if(agg[i.n]){ const a=i.p*agg[i.n]; t+=a;
       const ps=so.filter(o=>o.food?.[i.n]).map(o=>o.name).join('、');
-      h+=`<div class="order-row"><div><span class="order-name">${i.n} ×${agg[i.n]}</span><br><span class="order-person">→ ${ps}</span></div><span class="order-price">$${a}</span></div>`; }}));
+      h+=`<div class="order-row"><div><span class="order-name">${i.n} ×${agg[i.n]}</span><br><span class="order-person">${ps}</span></div><span class="order-price">$${a}</span></div>`; }}));
     const rems=so.filter(o=>o.foodRemark).map(o=>`${o.name}：${o.foodRemark}`).join('；');
-    if(rems) h+=`<div class="order-row"><span style="font-size:12px;color:var(--text3)">備註｜${rems}</span></div>`;
-    h+=`<div class="total-row"><span>主食小計</span><span class="total-amount">$${t}</span></div></div>`;
+    if(rems) h+=`<div style="font-size:12px;color:var(--text3);padding:4px 0">備註｜${rems}</div>`;
+    h+=`<div class="total-row" style="font-size:14px"><span>小計</span><span class="total-amount">$${t}</span></div>`;
   });
-
-  // Admin: drink aggregation
-  [...new Set(orders.map(o=>o.drinkStore))].forEach(store=>{
+  h+='<hr class="divider">';
+  // Drink
+  [...new Set(orders.map(o=>o.drinkStore).filter(Boolean))].forEach(store=>{
     const so=orders.filter(o=>o.drinkStore===store); const agg={};
     so.forEach(o=>Object.entries(o.drink||{}).forEach(([k,v])=>{ const key=`${k}${v.size?' ('+v.size+')':''}`;
       if(!agg[key]) agg[key]={qty:0,price:v.price}; agg[key].qty+=v.qty; }));
     if(!Object.keys(agg).length) return;
-    h+=`<div class="summary-card"><h3>🧋 ${store} 彙整</h3>`;
+    h+=`<div style="font-weight:900;color:var(--accent2);margin:10px 0 6px">🧋 ${store}</div>`;
     let t=0;
-    Object.entries(agg).forEach(([k,v])=>{ const a=v.price*v.qty; t+=a;
-      h+=`<div class="order-row"><span class="order-name">${k} ×${v.qty}</span><span class="order-price">$${a}</span></div>`; });
+    Object.entries(agg).forEach(([k,v])=>{ const a=v.price*v.qty; t+=a; h+=`<div class="order-row"><span class="order-name">${k} ×${v.qty}</span><span class="order-price">$${a}</span></div>`; });
     const rems=so.filter(o=>o.drinkRemark).map(o=>`${o.name}：${o.drinkRemark}`).join('；');
-    if(rems) h+=`<div class="order-row"><span style="font-size:12px;color:var(--text3)">備註｜${rems}</span></div>`;
-    h+=`<div class="total-row"><span>飲料小計</span><span class="total-amount">$${t}</span></div></div>`;
+    if(rems) h+=`<div style="font-size:12px;color:var(--text3);padding:4px 0">備註｜${rems}</div>`;
+    h+=`<div class="total-row" style="font-size:14px"><span>小計</span><span class="total-amount">$${t}</span></div>`;
   });
-
-  // Admin: per person total
-  h+=`<div class="summary-card"><h3>💰 個人金額統計</h3>`;
+  h+='<hr class="divider">';
+  // Per person
+  h+=`<div style="font-weight:900;margin:10px 0 6px">💰 個人金額</div>`;
   let grand=0;
   orders.forEach(o=>{ const pt=personTotal(o); grand+=pt;
     h+=`<div class="order-row"><span class="order-name">${o.name} <span style="font-size:11px;color:var(--text3)">${o.time}</span></span><span class="order-price">$${pt}</span></div>`; });
-  h+=`<div class="total-row"><span>今日總計</span><span class="total-amount">$${grand}</span></div></div>`;
-  h+=`<button class="btn-primary" onclick="exportText()" style="margin-bottom:16px">📋 複製 Line 訊息給店家</button>`;
+  h+=`<div class="total-row"><span>今日總計</span><span class="total-amount">$${grand}</span></div>`;
+  h+=`<button class="export-btn" style="margin-top:14px" onclick="exportText()">📋 複製 Line 訊息給店家</button>`;
   container.innerHTML=h;
 }
 
@@ -589,14 +813,14 @@ function renderSummary(){
 function exportText(){
   const orders=Object.values(allOrders||{});
   let txt=`📋 今日午餐訂單\n${'─'.repeat(20)}\n`;
-  [...new Set(orders.map(o=>o.foodStore))].forEach(store=>{
+  [...new Set(orders.map(o=>o.foodStore).filter(Boolean))].forEach(store=>{
     txt+=`\n🍜 ${store}\n`; const agg={};
     orders.filter(o=>o.foodStore===store).forEach(o=>Object.entries(o.food||{}).forEach(([k,q])=>{agg[k]=(agg[k]||0)+q;}));
     FM[store]?.forEach(c=>c.items.forEach(i=>{if(agg[i.n]) txt+=`  ${i.n} ×${agg[i.n]}\n`;}));
     const r=orders.filter(o=>o.foodStore===store&&o.foodRemark).map(o=>`${o.name}：${o.foodRemark}`);
     if(r.length) txt+=`  備註：${r.join('；')}\n`;
   });
-  [...new Set(orders.map(o=>o.drinkStore))].forEach(store=>{
+  [...new Set(orders.map(o=>o.drinkStore).filter(Boolean))].forEach(store=>{
     txt+=`\n🧋 ${store}\n`; const agg={};
     orders.filter(o=>o.drinkStore===store).forEach(o=>Object.entries(o.drink||{}).forEach(([k,v])=>{
       const key=`${k}${v.size?' ('+v.size+')':''}`; agg[key]=(agg[key]||0)+v.qty; }));
@@ -608,6 +832,8 @@ function exportText(){
   orders.forEach(o=>{ txt+=`${o.name}：$${personTotal(o)}\n`; });
   navigator.clipboard.writeText(txt).then(()=>showToast('✅ 已複製！貼到 Line 傳給店家'));
 }
+
+function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
 </script>
 </body>
 </html>
