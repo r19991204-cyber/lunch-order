@@ -158,6 +158,30 @@
   .divider{border:none;border-top:1px dashed var(--border);margin:16px 0;}
   .export-btn{background:var(--primary);color:white;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:900;font-family:inherit;cursor:pointer;width:100%;margin-bottom:14px;}
 
+  /* ── SWEET / ICE PICKER ── */
+  .drink-options{margin-top:7px;display:flex;flex-direction:column;gap:5px;}
+  .option-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+  .option-label{font-size:11px;color:var(--text3);font-weight:700;width:32px;flex-shrink:0;}
+  .opt-btn{padding:3px 9px;border:1.5px solid var(--border);border-radius:16px;font-size:12px;font-weight:700;background:var(--bg);cursor:pointer;font-family:inherit;color:var(--text2);white-space:nowrap;transition:all 0.15s;}
+  .opt-btn.sweet-active{border-color:#E67E22;background:#FEF5EC;color:#E67E22;}
+  .opt-btn.ice-active{border-color:var(--accent2);background:#EBF5FB;color:var(--accent2);}
+  /* optional store toggle in admin */
+  .optional-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .optional-row label{font-size:13px;color:var(--text2);}
+  .small-toggle{position:relative;width:38px;height:22px;}
+  .small-toggle input{display:none;}
+  .small-slider{position:absolute;inset:0;background:#ccc;border-radius:22px;cursor:pointer;transition:0.3s;}
+  .small-slider::before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:white;border-radius:50%;transition:0.3s;}
+  .small-toggle input:checked+.small-slider{background:var(--green);}
+  .small-toggle input:checked+.small-slider::before{transform:translateX(16px);}
+  /* aggregated order table */
+  .agg-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px;}
+  .agg-table th{background:var(--bg);padding:6px 8px;text-align:left;font-weight:700;font-size:12px;color:var(--text3);}
+  .agg-table td{padding:7px 8px;border-bottom:1px solid #F5EDE0;vertical-align:top;}
+  .agg-table tr:last-child td{border-bottom:none;}
+  .agg-count{font-weight:900;color:var(--primary);text-align:center;}
+  .agg-detail{font-size:11px;color:var(--text3);margin-top:2px;}
+
   /* ── EDIT / DELETE ── */
   .order-actions{display:flex;gap:6px;margin-top:10px;}
   .btn-edit{flex:1;background:#EBF5FB;color:var(--accent2);border:1.5px solid var(--accent2);border-radius:8px;padding:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
@@ -303,20 +327,38 @@
   </div>
 
   <div class="admin-card">
-    <h3>🍜 選擇今日主食店家</h3>
-    <div class="store-grid">
-      <button class="store-btn" onclick="adminSelectFood('小紅堂')" id="afs-小紅堂"><span class="emoji">🥩</span>小紅堂</button>
-      <button class="store-btn" onclick="adminSelectFood('有餘')" id="afs-有餘"><span class="emoji">🐟</span>有餘</button>
-      <button class="store-btn" onclick="adminSelectFood('鄉寓')" id="afs-鄉寓"><span class="emoji">🍛</span>鄉寓</button>
+    <h3>🍜 今日主食店家</h3>
+    <div class="optional-row">
+      <label class="small-toggle">
+        <input type="checkbox" id="foodEnabled" onchange="toggleFoodEnabled()">
+        <span class="small-slider"></span>
+      </label>
+      <label for="foodEnabled" style="cursor:pointer">今日有訂主食</label>
+    </div>
+    <div id="foodStoreGrid" style="display:none">
+      <div class="store-grid">
+        <button class="store-btn" onclick="adminSelectFood('小紅堂')" id="afs-小紅堂"><span class="emoji">🥩</span>小紅堂</button>
+        <button class="store-btn" onclick="adminSelectFood('有餘')" id="afs-有餘"><span class="emoji">🐟</span>有餘</button>
+        <button class="store-btn" onclick="adminSelectFood('鄉寓')" id="afs-鄉寓"><span class="emoji">🍛</span>鄉寓</button>
+      </div>
     </div>
   </div>
 
   <div class="admin-card">
-    <h3>🧋 選擇今日飲料店家</h3>
-    <div class="store-grid">
-      <button class="store-btn" onclick="adminSelectDrink('可不可')" id="ads-可不可"><span class="emoji">☕</span>可不可</button>
-      <button class="store-btn" onclick="adminSelectDrink('老賴')" id="ads-老賴"><span class="emoji">🍹</span>老賴</button>
-      <button class="store-btn" onclick="adminSelectDrink('得正')" id="ads-得正"><span class="emoji">🍵</span>得正</button>
+    <h3>🧋 今日飲料店家</h3>
+    <div class="optional-row">
+      <label class="small-toggle">
+        <input type="checkbox" id="drinkEnabled" onchange="toggleDrinkEnabled()">
+        <span class="small-slider"></span>
+      </label>
+      <label for="drinkEnabled" style="cursor:pointer">今日有訂飲料</label>
+    </div>
+    <div id="drinkStoreGrid" style="display:none">
+      <div class="store-grid">
+        <button class="store-btn" onclick="adminSelectDrink('可不可')" id="ads-可不可"><span class="emoji">☕</span>可不可</button>
+        <button class="store-btn" onclick="adminSelectDrink('老賴')" id="ads-老賴"><span class="emoji">🍹</span>老賴</button>
+        <button class="store-btn" onclick="adminSelectDrink('得正')" id="ads-得正"><span class="emoji">🍵</span>得正</button>
+      </div>
     </div>
   </div>
 
@@ -600,6 +642,17 @@ function renderFoodSection() {
   container.innerHTML = h;
 }
 
+// ══════════════════════════════════════════
+// SWEET / ICE OPTIONS
+// ══════════════════════════════════════════
+const SWEET_OPTS = ['無糖','1分糖','微糖','半糖','全糖'];
+const ICE_OPTS   = ['去冰','少冰','微冰','正常冰'];
+const DEFAULT_SWEET = '半糖';
+const DEFAULT_ICE   = '正常冰';
+
+function drinkKey(name, size) { return size ? `${name}__${size}` : name; }
+function drinkDisplay(name, size) { return size ? `${name}（${size}）` : name; }
+
 function renderDrinkSection() {
   const container = document.getElementById('drinkContent');
   const store = todayConfig.drinkStore;
@@ -612,21 +665,42 @@ function renderDrinkSection() {
   DM[store].forEach(cat => {
     h += `<div class="category-title">🧋 ${cat.cat}</div>`;
     cat.items.forEach(i => {
-      const ord=myDrink[i.n]; const q=ord?ord.qty:0;
-      const sk=Object.keys(i.s||{}); const cs=ord?ord.size:(sk[0]||'');
-      const pr=i.p||(i.s?.[cs]||i.s?.[sk[0]]||0);
-      let sp='';
-      if(sk.length>1) sp=`<div class="size-picker">`+sk.map(k=>`<button class="size-btn ${cs===k?'active':''}" onclick="setDS('${esc(i.n)}','${k}',${i.s[k]})">${k} $${i.s[k]}</button>`).join('')+`</div>`;
-      h += `<div class="menu-item ${q>0?'selected':''}">
-        <div class="item-info"><div class="item-name">${i.n}</div><div class="item-price">$${pr}</div>${sp}</div>
-        <div class="qty-control">
-          <button class="qty-btn" onclick="chgD('${esc(i.n)}',-1)" ${q===0?'style="opacity:.3"':''}>−</button>
-          <div class="qty-num">${q||''}</div>
-          <button class="qty-btn plus" onclick="chgD('${esc(i.n)}',1)">+</button>
-        </div></div>`;
+      const sk = Object.keys(i.s || {});
+      // For each size (or single item), render a row
+      const sizeList = sk.length > 1 ? sk : [sk[0] || ''];
+      sizeList.forEach(sz => {
+        const key = drinkKey(i.n, sk.length > 1 ? sz : '');
+        const ord = myDrink[key];
+        const q = ord ? ord.qty : 0;
+        const pr = i.p || i.s?.[sz] || 0;
+        const sweet = ord?.sweet || DEFAULT_SWEET;
+        const ice   = ord?.ice   || DEFAULT_ICE;
+        const label = sk.length > 1 ? `${i.n}（${sz}） $${pr}` : `${i.n}`;
+        h += `<div class="menu-item ${q > 0 ? 'selected' : ''}">
+          <div class="item-info">
+            <div class="item-name">${label}</div>
+            <div class="item-price">$${pr}</div>
+            ${q > 0 ? `<div class="drink-options">
+              <div class="option-row">
+                <span class="option-label">甜度</span>
+                ${SWEET_OPTS.map(s=>`<button class="opt-btn ${sweet===s?'sweet-active':''}" onclick="setDrinkOpt('${esc(key)}','sweet','${s}')">${s}</button>`).join('')}
+              </div>
+              <div class="option-row">
+                <span class="option-label">冰量</span>
+                ${ICE_OPTS.map(ic=>`<button class="opt-btn ${ice===ic?'ice-active':''}" onclick="setDrinkOpt('${esc(key)}','ice','${ic}')">${ic}</button>`).join('')}
+              </div>
+            </div>` : ''}
+          </div>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="chgD2('${esc(key)}','${esc(i.n)}','${sz}',${pr},-1)" ${q===0?'style="opacity:.3"':''}>−</button>
+            <div class="qty-num">${q||''}</div>
+            <button class="qty-btn plus" onclick="chgD2('${esc(key)}','${esc(i.n)}','${sz}',${pr},1)">+</button>
+          </div>
+        </div>`;
+      });
     });
   });
-  h += `<div class="remark-row"><label>📝 飲料備註（甜度、冰量）</label><input type="text" id="drinkRemark" placeholder="例：少糖少冰、無糖去冰"/></div>`;
+  h += `<div class="remark-row"><label>📝 其他飲料備註</label><input type="text" id="drinkRemark" placeholder="其他特殊需求"/></div>`;
   container.innerHTML = h;
 }
 
@@ -664,13 +738,29 @@ function waitingHTML(type, store) {
 // ══════════════════════════════════════════
 const esc = s => s.replace(/'/g,"\\'");
 function chgF(n,p,d){ const q=Math.max(0,(myFood[n]||0)+d); if(q===0) delete myFood[n]; else myFood[n]=q; renderFoodSection(); updateCart(); }
-function setDS(n,sk,pr){ if(!myDrink[n]) myDrink[n]={qty:0,size:sk,price:pr}; else{myDrink[n].size=sk;myDrink[n].price=pr;} renderDrinkSection(); updateCart(); }
+
+// New drink functions using composite key (name__size)
+function chgD2(key, name, sz, pr, d) {
+  const cur = myDrink[key] || {qty:0};
+  const q = Math.max(0, cur.qty + d);
+  if (q === 0) { delete myDrink[key]; }
+  else if (!myDrink[key]) {
+    myDrink[key] = {qty:q, name, size:sz, price:pr, sweet:DEFAULT_SWEET, ice:DEFAULT_ICE};
+  } else { myDrink[key].qty = q; }
+  renderDrinkSection(); updateCart();
+}
+function setDrinkOpt(key, opt, val) {
+  if (!myDrink[key]) return;
+  myDrink[key][opt] = val;
+  renderDrinkSection(); updateCart();
+}
+// Keep old chgD for backward compat in edit modal (will be updated separately)
 function chgD(n,d){
   let item; DM[todayConfig.drinkStore]?.forEach(c=>c.items.forEach(i=>{if(i.n===n)item=i;})); if(!item) return;
-  const cur=myDrink[n]||{qty:0}; const q=Math.max(0,cur.qty+d);
-  if(q===0){ delete myDrink[n]; }
-  else if(!myDrink[n]){ const sk=Object.keys(item.s||{})[0]||''; myDrink[n]={qty:q,size:sk,price:item.p||item.s?.[sk]||0}; }
-  else myDrink[n].qty=q;
+  const key=n; const cur=myDrink[key]||{qty:0}; const q=Math.max(0,cur.qty+d);
+  if(q===0){ delete myDrink[key]; }
+  else if(!myDrink[key]){ const sk=Object.keys(item.s||{})[0]||''; myDrink[key]={qty:q,name:n,size:sk,price:item.p||item.s?.[sk]||0,sweet:DEFAULT_SWEET,ice:DEFAULT_ICE}; }
+  else myDrink[key].qty=q;
   renderDrinkSection(); updateCart();
 }
 
@@ -697,7 +787,11 @@ function updateCart(){
 function openConfirm(){
   let h='';
   FM[todayConfig.foodStore]?.forEach(c=>c.items.forEach(i=>{if(myFood[i.n]) h+=`<div class="confirm-item"><span>🍜 ${i.n} ×${myFood[i.n]}</span><span>$${i.p*myFood[i.n]}</span></div>`;}));
-  Object.entries(myDrink).forEach(([k,o])=>{ h+=`<div class="confirm-item"><span>🧋 ${k}${o.size?' ('+o.size+')':''} ×${o.qty}</span><span>$${o.price*o.qty}</span></div>`; });
+  Object.entries(myDrink).forEach(([k,o])=>{
+    const label=`🧋 ${o.name||k}${o.size?'（'+o.size+'）':''} ×${o.qty}`;
+    const opts=`${o.sweet||''}${o.ice?' '+o.ice:''}`;
+    h+=`<div class="confirm-item"><span>${label}<br><span style="font-size:11px;color:#888">${opts}</span></span><span>$${o.price*o.qty}</span></div>`;
+  });
   const fr=document.getElementById('foodRemark')?.value||'';
   const dr=document.getElementById('drinkRemark')?.value||'';
   if(fr) h+=`<div class="confirm-item" style="color:#888"><span>主食備註</span><span>${fr}</span></div>`;
@@ -749,7 +843,6 @@ function updateStatusDesc(){
 }
 
 function syncAdminUI(){
-  // sync toggles and store buttons to current config
   const tog=document.getElementById('orderStatusToggle');
   tog.checked = todayConfig.isOpen||false;
   updateStatusDesc();
@@ -757,6 +850,13 @@ function syncAdminUI(){
   badge.innerHTML = todayConfig.isOpen
     ? `<div class="status-badge open"><span class="dot green"></span>點餐開放中</div>`
     : `<div class="status-badge closed"><span class="dot red"></span>點餐已關閉</div>`;
+
+  const foodOn = !!todayConfig.foodStore;
+  const drinkOn = !!todayConfig.drinkStore;
+  document.getElementById('foodEnabled').checked = foodOn;
+  document.getElementById('drinkEnabled').checked = drinkOn;
+  document.getElementById('foodStoreGrid').style.display = foodOn ? '' : 'none';
+  document.getElementById('drinkStoreGrid').style.display = drinkOn ? '' : 'none';
 
   if(todayConfig.foodStore && !adminDraftFood){
     adminDraftFood=todayConfig.foodStore;
@@ -770,14 +870,29 @@ function syncAdminUI(){
   }
 }
 
+function toggleFoodEnabled(){
+  const on=document.getElementById('foodEnabled').checked;
+  document.getElementById('foodStoreGrid').style.display=on?'':'none';
+  if(!on) adminDraftFood=null;
+}
+function toggleDrinkEnabled(){
+  const on=document.getElementById('drinkEnabled').checked;
+  document.getElementById('drinkStoreGrid').style.display=on?'':'none';
+  if(!on) adminDraftDrink=null;
+}
+
 async function saveAdminSettings(){
-  const foodStore = adminDraftFood || todayConfig.foodStore;
-  const drinkStore = adminDraftDrink || todayConfig.drinkStore;
-  if(!foodStore||!drinkStore){ showToast('⚠️ 請先選擇主食和飲料店家'); return; }
+  const foodOn = document.getElementById('foodEnabled').checked;
+  const drinkOn = document.getElementById('drinkEnabled').checked;
+  if(!foodOn && !drinkOn){ showToast('⚠️ 請至少選擇主食或飲料其中一項'); return; }
+  const foodStore = foodOn ? (adminDraftFood || todayConfig.foodStore) : null;
+  const drinkStore = drinkOn ? (adminDraftDrink || todayConfig.drinkStore) : null;
+  if(foodOn && !foodStore){ showToast('⚠️ 請選擇今日主食店家'); return; }
+  if(drinkOn && !drinkStore){ showToast('⚠️ 請選擇今日飲料店家'); return; }
   const isOpen = document.getElementById('orderStatusToggle').checked;
   const btn=document.getElementById('adminSaveBtn'); btn.disabled=true; btn.textContent='儲存中...';
   try{
-    await fbSet(`config/${TODAY}`,{foodStore,drinkStore,isOpen,updatedAt:Date.now()});
+    await fbSet(`config/${TODAY}`,{foodStore:foodStore||null, drinkStore:drinkStore||null, isOpen, updatedAt:Date.now()});
     showToast(isOpen ? '✅ 設定已儲存，點餐已開放！' : '✅ 設定已儲存');
   }catch(e){ showToast('❌ 儲存失敗，請重試'); }
   btn.disabled=false; btn.textContent='💾 儲存設定並通知同仁';
@@ -803,7 +918,11 @@ function renderSummary(){
     h+=`<div class="summary-card"><h3>✅ 我的訂單 <span style="font-size:11px;color:var(--text3);margin-left:auto">${myOrd.time}</span></h3>`;
     FM[myOrd.foodStore]?.forEach(c=>c.items.forEach(i=>{ if(myOrd.food?.[i.n]){ const a=i.p*myOrd.food[i.n]; h+=`<div class="order-row"><span class="order-name">🍜 ${i.n} ×${myOrd.food[i.n]}</span><span class="order-price">$${a}</span></div>`; }}));
     if(myOrd.foodRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:12px">備註：${myOrd.foodRemark}</span></div>`;
-    Object.entries(myOrd.drink||{}).forEach(([k,o])=>{ const a=o.price*o.qty; h+=`<div class="order-row"><span class="order-name">🧋 ${k}${o.size?' ('+o.size+')':''} ×${o.qty}</span><span class="order-price">$${a}</span></div>`; });
+    Object.entries(myOrd.drink||{}).forEach(([k,o])=>{
+      const a=o.price*o.qty;
+      const label=`🧋 ${o.name||k}${o.size?'（'+o.size+'）':''} ×${o.qty}`;
+      h+=`<div class="order-row"><div><span class="order-name">${label}</span><div class="agg-detail">${o.sweet||''}${o.ice?' · '+o.ice:''}</div></div><span class="order-price">$${a}</span></div>`;
+    });
     if(myOrd.drinkRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:12px">備註：${myOrd.drinkRemark}</span></div>`;
     h+=`<div class="total-row"><span>個人小計</span><span class="total-amount">$${personTotal(myOrd)}</span></div>`;
     h+=`<div class="order-actions">
@@ -813,10 +932,42 @@ function renderSummary(){
   } else {
     h+=`<div class="empty-state"><span class="emoji">📝</span>你今天還沒點餐！</div>`;
   }
+  // Aggregated table
+  h += buildAggCard(orders);
   h+=`<div class="summary-card"><h3>👥 今日已點餐（${orders.length}人）</h3>`;
   orders.forEach(o=>{ h+=`<div class="order-row"><span class="order-name">${o.name}</span><span style="font-size:12px;color:var(--text3)">${o.time}</span><span class="order-price">$${personTotal(o)}</span></div>`; });
   h+=`</div>`;
   container.innerHTML=h;
+}
+
+function buildAggCard(orders) {
+  // Food agg
+  let foodRows='', drinkRows='';
+  const foodStores=[...new Set(orders.map(o=>o.foodStore).filter(Boolean))];
+  foodStores.forEach(store=>{
+    const agg={};
+    orders.filter(o=>o.foodStore===store).forEach(o=>Object.entries(o.food||{}).forEach(([k,q])=>{agg[k]=(agg[k]||0)+q;}));
+    FM[store]?.forEach(c=>c.items.forEach(i=>{ if(agg[i.n]) foodRows+=`<tr><td>🍜 ${i.n}</td><td class="agg-count">×${agg[i.n]}</td></tr>`; }));
+  });
+  // Drink agg — group by name+size+sweet+ice
+  const drinkStores=[...new Set(orders.map(o=>o.drinkStore).filter(Boolean))];
+  drinkStores.forEach(()=>{
+    const agg={};
+    orders.forEach(o=>Object.entries(o.drink||{}).forEach(([,v])=>{
+      const label=`${v.name||''}${v.size?'（'+v.size+'）':''}`;
+      const opts=`${v.sweet||DEFAULT_SWEET} ${v.ice||DEFAULT_ICE}`;
+      const key=`${label}|||${opts}`;
+      if(!agg[key]) agg[key]={label,opts,qty:0,price:v.price};
+      agg[key].qty+=v.qty;
+    }));
+    Object.values(agg).forEach(v=>{ drinkRows+=`<tr><td>🧋 ${v.label}<div class="agg-detail">${v.opts}</div></td><td class="agg-count">×${v.qty}</td></tr>`; });
+  });
+  if(!foodRows && !drinkRows) return '';
+  return `<div class="summary-card"><h3>📊 今日訂單彙整</h3>
+    <table class="agg-table">
+      <thead><tr><th>品項</th><th style="text-align:center">數量</th></tr></thead>
+      <tbody>${foodRows}${drinkRows}</tbody>
+    </table></div>`;
 }
 
 function renderAdminSummary(){
@@ -854,6 +1005,9 @@ function renderAdminSummary(){
     h+=`<div class="total-row" style="font-size:14px"><span>小計</span><span class="total-amount">$${t}</span></div>`;
   });
   h+='<hr class="divider">';
+  // Aggregated table
+  h += buildAggCard(orders).replace('summary-card','').replace(/^<div /,'<div style="margin-bottom:12px" ');
+  h+='<hr class="divider">';
   // Per person
   h+=`<div style="font-weight:900;margin:10px 0 6px">💰 個人金額</div>`;
   let grand=0;
@@ -870,7 +1024,7 @@ function renderAdminSummary(){
       </div>`;
     FM[o.foodStore]?.forEach(c=>c.items.forEach(i=>{ if(o.food?.[i.n]) h+=`<div style="font-size:13px;color:var(--text2);padding:2px 0">🍜 ${i.n} ×${o.food[i.n]} <span style="color:var(--accent)">$${i.p*o.food[i.n]}</span></div>`; }));
     if(o.foodRemark) h+=`<div style="font-size:12px;color:var(--text3)">備註：${o.foodRemark}</div>`;
-    Object.entries(o.drink||{}).forEach(([dk,dv])=>{ h+=`<div style="font-size:13px;color:var(--text2);padding:2px 0">🧋 ${dk}${dv.size?' ('+dv.size+')':''} ×${dv.qty} <span style="color:var(--accent)">$${dv.price*dv.qty}</span></div>`; });
+    Object.entries(o.drink||{}).forEach(([dk,dv])=>{ h+=`<div style="font-size:13px;color:var(--text2);padding:2px 0">🧋 ${dv.name||dk}${dv.size?'（'+dv.size+'）':''} ×${dv.qty} <span style="color:var(--accent)">$${dv.price*dv.qty}</span> <span style="font-size:11px;color:var(--text3)">${dv.sweet||''} ${dv.ice||''}</span></div>`; });
     if(o.drinkRemark) h+=`<div style="font-size:12px;color:var(--text3)">備註：${o.drinkRemark}</div>`;
     h+=`<div style="font-weight:900;font-size:14px;color:var(--primary);margin-top:6px;text-align:right">小計 $${pt}</div>`;
     h+=`</div>`;
@@ -886,6 +1040,7 @@ function renderAdminSummary(){
 function exportText(){
   const orders=Object.values(allOrders||{});
   let txt=`📋 今日午餐訂單\n${'─'.repeat(20)}\n`;
+  // Food
   [...new Set(orders.map(o=>o.foodStore).filter(Boolean))].forEach(store=>{
     txt+=`\n🍜 ${store}\n`; const agg={};
     orders.filter(o=>o.foodStore===store).forEach(o=>Object.entries(o.food||{}).forEach(([k,q])=>{agg[k]=(agg[k]||0)+q;}));
@@ -893,11 +1048,18 @@ function exportText(){
     const r=orders.filter(o=>o.foodStore===store&&o.foodRemark).map(o=>`${o.name}：${o.foodRemark}`);
     if(r.length) txt+=`  備註：${r.join('；')}\n`;
   });
+  // Drink — group by name+size+sweet+ice
   [...new Set(orders.map(o=>o.drinkStore).filter(Boolean))].forEach(store=>{
-    txt+=`\n🧋 ${store}\n`; const agg={};
-    orders.filter(o=>o.drinkStore===store).forEach(o=>Object.entries(o.drink||{}).forEach(([k,v])=>{
-      const key=`${k}${v.size?' ('+v.size+')':''}`; agg[key]=(agg[key]||0)+v.qty; }));
-    Object.entries(agg).forEach(([k,q])=>{txt+=`  ${k} ×${q}\n`;});
+    txt+=`\n🧋 ${store}\n`;
+    const agg={};
+    orders.filter(o=>o.drinkStore===store).forEach(o=>Object.entries(o.drink||{}).forEach(([,v])=>{
+      const label=`${v.name||''}${v.size?'（'+v.size+'）':''}`;
+      const opts=`${v.sweet||DEFAULT_SWEET} ${v.ice||DEFAULT_ICE}`;
+      const key=`${label}|||${opts}`;
+      if(!agg[key]) agg[key]={label,opts,qty:0};
+      agg[key].qty+=v.qty;
+    }));
+    Object.values(agg).forEach(v=>{ txt+=`  ${v.label} ×${v.qty}（${v.opts}）\n`; });
     const r=orders.filter(o=>o.drinkStore===store&&o.drinkRemark).map(o=>`${o.name}：${o.drinkRemark}`);
     if(r.length) txt+=`  備註：${r.join('；')}\n`;
   });
