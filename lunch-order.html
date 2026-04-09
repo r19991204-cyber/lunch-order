@@ -926,8 +926,8 @@ function renderSummary(){
     if(myOrd.drinkRemark) h+=`<div class="order-row"><span style="color:var(--text3);font-size:12px">備註：${myOrd.drinkRemark}</span></div>`;
     h+=`<div class="total-row"><span>個人小計</span><span class="total-amount">$${personTotal(myOrd)}</span></div>`;
     h+=`<div class="order-actions">
-      <button class="btn-edit" onclick="openEdit('${nameKey(myName)}')">✏️ 修改訂單</button>
-      <button class="btn-delete" onclick="openDelete('${nameKey(myName)}','${myName}')">🗑️ 刪除訂單</button>
+      <button class="btn-edit" data-key="${nameKey(myName)}" onclick="openEdit(this.dataset.key)">✏️ 修改訂單</button>
+      <button class="btn-delete" data-key="${nameKey(myName)}" data-name="${myName.replace(/"/g,'&quot;')}" onclick="openDelete(this.dataset.key, this.dataset.name)">🗑️ 刪除訂單</button>
     </div></div>`;
   } else {
     h+=`<div class="empty-state"><span class="emoji">📝</span>你今天還沒點餐！</div>`;
@@ -1018,8 +1018,8 @@ function renderAdminSummary(){
       <div class="person-name">
         <span>${o.name} <span style="font-size:11px;color:var(--text3);font-weight:400">${o.time}</span></span>
         <div class="person-action-btns">
-          <button class="icon-btn" title="修改" onclick="openEdit('${k}')">✏️</button>
-          <button class="icon-btn" title="刪除" onclick="openDelete('${k}','${o.name}')">🗑️</button>
+          <button class="icon-btn" title="修改" data-key="${k}" onclick="openEdit(this.dataset.key)">✏️</button>
+          <button class="icon-btn" title="刪除" data-key="${k}" data-name="${o.name.replace(/"/g,'&quot;')}" onclick="openDelete(this.dataset.key, this.dataset.name)">🗑️</button>
         </div>
       </div>`;
     FM[o.foodStore]?.forEach(c=>c.items.forEach(i=>{ if(o.food?.[i.n]) h+=`<div style="font-size:13px;color:var(--text2);padding:2px 0">🍜 ${i.n} ×${o.food[i.n]} <span style="color:var(--accent)">$${i.p*o.food[i.n]}</span></div>`; }));
@@ -1203,7 +1203,9 @@ async function confirmDelete() {
   if (!deleteTargetKey) return;
   const btn = document.getElementById('deleteConfirmBtn'); btn.disabled = true; btn.textContent = '刪除中...';
   try {
-    await fetch(`${DB}/orders/${TODAY}/${deleteTargetKey}.json`, { method: 'DELETE' });
+    const path = `${DB}/orders/${TODAY}/${deleteTargetKey}.json`;
+    const res = await fetch(path, { method: 'DELETE' });
+    if (!res.ok) throw new Error('delete failed');
     closeDelete();
     showToast('🗑️ 訂單已刪除');
   } catch(e) { showToast('❌ 刪除失敗，請重試'); }
