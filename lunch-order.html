@@ -1367,10 +1367,21 @@ async function runAIScan() {
   statusEl.style.display = '';
   statusEl.innerHTML = `<div class="ai-status"><span class="spinner"></span>AI 正在辨識菜單圖片，請稍候...</div>`;
 
+  // 自動偵測圖片格式
+  const imgEl = document.getElementById('previewImg');
+  let mediaType = 'image/jpeg';
+  if (imgEl.src.startsWith('data:image/png')) mediaType = 'image/png';
+  else if (imgEl.src.startsWith('data:image/webp')) mediaType = 'image/webp';
+  else if (imgEl.src.startsWith('data:image/gif')) mediaType = 'image/gif';
+
   try {
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -1379,30 +1390,45 @@ async function runAIScan() {
           content: [
             {
               type: 'image',
-              source: { type: 'base64', media_type: 'image/jpeg', data: menuImgBase64 }
+              source: { type: 'base64', media_type: mediaType, data: menuImgBase64 }
             },
             {
               type: 'text',
-              text: `請辨識這張菜單圖片中所有的品項名稱和價格。
-只回傳 JSON 格式，不要有任何說明文字或 markdown，格式如下：
-{"items":[{"name":"品項名稱","price":價格數字},...]}`
+              text: `請辨識這張菜單圖片中所有的品項名稱和價格。只回傳純 JSON，不要 markdown 或說明文字，格式：{"items":[{"name":"品項名稱","price":價格數字},...]}`
             }
           ]
         }]
       })
     });
+
+    if (!resp.ok) {
+      const errBody = await resp.text();
+      throw new Error(`HTTP ${resp.status}: ${errBody}`);
+    }
+
     const data = await resp.json();
-    const text = data.content?.map(c => c.text||'').join('');
+
+    // 檢查 API 層級錯誤
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+
+    const text = data.content?.map(c => c.text||'').join('') || '';
     const clean = text.replace(/```json|```/g,'').trim();
     const parsed = JSON.parse(clean);
     newStoreItems = (parsed.items || []).map(i => ({
-      name: i.name || '',
+      name: String(i.name || '').trim(),
       price: Number(i.price) || 0
-    }));
-    statusEl.innerHTML = `<div class="ai-status">✅ 辨識完成！共找到 ${newStoreItems.length} 個品項，請確認後儲存</div>`;
+    })).filter(i => i.name);
+
+    if (!newStoreItems.length) throw new Error('未辨識到任何品項，請確認圖片清晰度或改用手動輸入');
+
+    statusEl.innerHTML = `<div class="ai-status">✅ 辨識完成！共找到 ${newStoreItems.length} 個品項，可在下方修改後儲存</div>`;
     renderItemsList();
   } catch(e) {
-    statusEl.innerHTML = `<div class="ai-status" style="background:#FDEDEC;color:var(--primary)">❌ 辨識失敗，請手動輸入品項，或重試</div>`;
+    console.error('AI scan error:', e);
+    statusEl.innerHTML = `<div class="ai-status" style="background:#FDEDEC;color:var(--primary)">
+      ❌ 辨識失敗：${e.message}<br>
+      <span style="font-size:12px">可改用下方手動輸入品項</span>
+    </div>`;
   }
   btn.disabled = false; btn.textContent = '🤖 重新辨識';
 }
