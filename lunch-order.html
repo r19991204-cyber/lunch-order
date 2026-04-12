@@ -182,6 +182,38 @@
   .agg-count{font-weight:900;color:var(--primary);text-align:center;}
   .agg-detail{font-size:11px;color:var(--text3);margin-top:2px;}
 
+  /* ── MENU MANAGER ── */
+  .menu-mgr-tab-row{display:flex;gap:8px;margin-bottom:16px;}
+  .menu-mgr-tab{flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--bg);font-family:inherit;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;text-align:center;}
+  .menu-mgr-tab.active{border-color:var(--admin);background:#F5EEF8;color:var(--admin);}
+  .upload-zone{border:2.5px dashed var(--border);border-radius:14px;padding:30px 20px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--bg);}
+  .upload-zone:hover,.upload-zone.drag{border-color:var(--admin);background:#F5EEF8;}
+  .upload-zone .uz-icon{font-size:40px;margin-bottom:10px;}
+  .upload-zone p{font-size:14px;color:var(--text2);margin:0;}
+  .upload-zone small{font-size:12px;color:var(--text3);}
+  .preview-img{width:100%;max-height:200px;object-fit:contain;border-radius:10px;margin:10px 0;border:1px solid var(--border);}
+  .ai-result-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #F5EDE0;}
+  .ai-result-item:last-child{border-bottom:none;}
+  .ai-item-name{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;outline:none;}
+  .ai-item-price{width:70px;border:1.5px solid var(--border);border-radius:8px;padding:6px 10px;font-size:14px;font-family:inherit;outline:none;text-align:right;}
+  .ai-item-name:focus,.ai-item-price:focus{border-color:var(--admin);}
+  .ai-del-btn{background:none;border:none;font-size:18px;cursor:pointer;color:var(--text3);padding:2px 6px;}
+  .ai-add-row{display:flex;gap:8px;margin-top:8px;}
+  .ai-add-row input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:14px;font-family:inherit;outline:none;}
+  .ai-add-row input:focus{border-color:var(--admin);}
+  .ai-add-btn{background:var(--admin);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;}
+  .saved-store-card{background:var(--card);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .saved-store-card .sc-name{flex:1;font-weight:700;font-size:15px;}
+  .saved-store-card .sc-type{font-size:12px;color:var(--text3);margin-top:2px;}
+  .saved-store-card .sc-count{font-size:12px;color:var(--text3);}
+  .sc-btn{background:none;border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--text2);}
+  .sc-btn.del{border-color:#FADBD8;color:var(--primary);}
+  .type-tabs{display:flex;gap:6px;margin-bottom:14px;}
+  .type-tab{flex:1;padding:8px;border:2px solid var(--border);border-radius:10px;background:var(--bg);font-family:inherit;font-size:13px;font-weight:700;color:var(--text2);cursor:pointer;text-align:center;}
+  .type-tab.active-food{border-color:var(--primary);background:#FEF0EE;color:var(--primary);}
+  .type-tab.active-drink{border-color:var(--accent2);background:#EBF5FB;color:var(--accent2);}
+  .ai-status{background:#F5EEF8;border-radius:10px;padding:12px 14px;font-size:13px;color:var(--admin);margin:10px 0;display:flex;align-items:center;gap:8px;}
+
   /* ── EDIT / DELETE ── */
   .order-actions{display:flex;gap:6px;margin-top:10px;}
   .btn-edit{flex:1;background:#EBF5FB;color:var(--accent2);border:1.5px solid var(--accent2);border-radius:8px;padding:8px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
@@ -292,6 +324,7 @@
   <div class="tab" id="tab-drink" onclick="switchTab('drink')">🧋 飲料</div>
   <div class="tab" id="tab-summary" onclick="switchTab('summary')">📋 統計<span class="badge" id="orderBadge" style="display:none">0</span></div>
   <div class="tab admin-tab" id="tab-admin" style="display:none" onclick="switchTab('admin')">⚙️ 管理</div>
+  <div class="tab admin-tab" id="tab-menus" style="display:none" onclick="switchTab('menus')">📂 菜單庫</div>
 </div>
 
 <!-- ── FOOD SECTION ── -->
@@ -369,6 +402,65 @@
   <div class="admin-card">
     <h3>📋 全員訂單彙整</h3>
     <div id="adminSummaryContent"><div class="loading"><span class="spinner"></span>載入中...</div></div>
+  </div>
+</div>
+
+<!-- ── MENU MANAGER SECTION ── -->
+<div class="section" id="sec-menus">
+  <div class="menu-mgr-tab-row">
+    <button class="menu-mgr-tab active" id="mmtab-add" onclick="switchMMTab('add')">➕ 新增菜單</button>
+    <button class="menu-mgr-tab" id="mmtab-saved" onclick="switchMMTab('saved')">📚 已儲存（<span id="savedCount">0</span>）</button>
+  </div>
+
+  <!-- ADD TAB -->
+  <div id="mm-add">
+    <div class="admin-card">
+      <h3>📝 店家資訊</h3>
+      <div style="margin-bottom:10px">
+        <label style="font-size:13px;font-weight:700;display:block;margin-bottom:6px">店家名稱</label>
+        <input type="text" id="newStoreName" placeholder="例：鬍鬚張魯肉飯" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:10px 12px;font-size:15px;font-family:inherit;outline:none;" onfocus="this.style.borderColor='var(--admin)'" onblur="this.style.borderColor='var(--border)'"/>
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:700;display:block;margin-bottom:8px">類型</label>
+        <div class="type-tabs">
+          <button class="type-tab active-food" id="typeFood" onclick="setStoreType('food')">🍜 主食</button>
+          <button class="type-tab" id="typeDrink" onclick="setStoreType('drink')">🧋 飲料</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-card">
+      <h3>📷 上傳菜單圖片（AI 辨識）</h3>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('menuImgInput').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleImgDrop(event)">
+        <div class="uz-icon">📷</div>
+        <p>點此上傳或拖曳菜單圖片</p>
+        <small>支援 JPG、PNG，AI 自動辨識品項和價格</small>
+      </div>
+      <input type="file" id="menuImgInput" accept="image/*" style="display:none" onchange="handleImgSelect(event)"/>
+      <img id="previewImg" class="preview-img" style="display:none"/>
+      <div id="aiStatus" style="display:none"></div>
+      <button id="aiScanBtn" class="btn-admin" style="display:none;margin-top:8px" onclick="runAIScan()">🤖 AI 辨識菜單</button>
+    </div>
+
+    <div class="admin-card" id="itemsCard">
+      <h3>📋 品項清單 <span id="itemCountBadge" style="font-size:12px;font-weight:400;color:var(--text3)"></span></h3>
+      <div id="itemsList"></div>
+      <div class="ai-add-row">
+        <input type="text" id="addItemName" placeholder="品項名稱"/>
+        <input type="text" id="addItemPrice" placeholder="價格" style="width:80px"/>
+        <button class="ai-add-btn" onclick="addItemManually()">＋ 新增</button>
+      </div>
+    </div>
+
+    <button class="admin-save-btn" onclick="saveNewStore()">💾 儲存至菜單庫</button>
+  </div>
+
+  <!-- SAVED TAB -->
+  <div id="mm-saved" style="display:none">
+    <div id="savedStoresList"><div class="loading"><span class="spinner"></span>載入中...</div></div>
   </div>
 </div>
 
@@ -551,7 +643,9 @@ function checkAdminPw() {
     renderHeaderRight();
     document.getElementById('mainHeader').classList.add('admin-mode');
     document.getElementById('tab-admin').style.display = '';
+    document.getElementById('tab-menus').style.display = '';
     startListening();
+    loadSavedMenus();
     switchTab('admin');
     showToast('👑 已進入管理模式');
   } else {
@@ -565,6 +659,7 @@ function adminLogout() {
   isAdmin = false;
   document.getElementById('mainHeader').classList.remove('admin-mode');
   document.getElementById('tab-admin').style.display = 'none';
+  document.getElementById('tab-menus').style.display = 'none';
   switchTab('food');
   renderHeaderRight();
   showToast('已退出管理模式');
@@ -600,7 +695,7 @@ const nameKey = n => (n||'').replace(/[.#$\/\[\]]/g,'_');
 // ══════════════════════════════════════════
 function switchTab(t) {
   curTab = t;
-  const allTabs = ['food','drink','summary','admin'];
+  const allTabs = ['food','drink','summary','admin','menus'];
   allTabs.forEach(x => {
     const tb = document.getElementById(`tab-${x}`); if (!tb) return;
     tb.classList.toggle('active', x===t);
@@ -611,6 +706,7 @@ function switchTab(t) {
   if (t==='food' || t==='drink') updateCart();
   if (t==='summary') renderSummary();
   if (t==='admin') { syncAdminUI(); renderAdminSummary(); }
+  if (t==='menus') renderSavedStores();
 }
 
 // ══════════════════════════════════════════
@@ -624,8 +720,13 @@ function renderFoodSection() {
     container.innerHTML = waitingHTML('food', store);
     return;
   }
+  const menuData = FM[store] || getMenuData('food', store);
+  if (!menuData) {
+    container.innerHTML = waitingHTML('food', store);
+    return;
+  }
   let h = `<div class="store-info-bar"><div><div class="label">今日主食</div><div class="name">🥩 ${store}</div></div></div>`;
-  FM[store].forEach(cat => {
+  menuData.forEach(cat => {
     h += `<div class="category-title">🍜 ${cat.cat}</div>`;
     cat.items.forEach(i => {
       const q = myFood[i.n]||0;
@@ -1213,6 +1314,245 @@ async function confirmDelete() {
 }
 
 function showToast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
+let newStoreType = 'food';
+let newStoreItems = []; // [{name, price}]
+let savedMenus = {};    // loaded from Firebase: menus/{id} = {name, type, categories:[{cat,items}]}
+let menuImgBase64 = null;
+
+// ── Tab switch ──
+function switchMMTab(t) {
+  document.getElementById('mm-add').style.display   = t==='add'   ? '' : 'none';
+  document.getElementById('mm-saved').style.display = t==='saved' ? '' : 'none';
+  document.getElementById('mmtab-add').classList.toggle('active', t==='add');
+  document.getElementById('mmtab-saved').classList.toggle('active', t==='saved');
+  if (t==='saved') renderSavedStores();
+}
+
+// ── Store type ──
+function setStoreType(type) {
+  newStoreType = type;
+  document.getElementById('typeFood').className  = 'type-tab ' + (type==='food'  ? 'active-food' : '');
+  document.getElementById('typeDrink').className = 'type-tab ' + (type==='drink' ? 'active-drink': '');
+}
+
+// ── Image handling ──
+function handleImgSelect(e) {
+  const file = e.target.files[0]; if (!file) return;
+  loadImgFile(file);
+}
+function handleImgDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0]; if (!file) return;
+  loadImgFile(file);
+}
+function loadImgFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    menuImgBase64 = ev.target.result.split(',')[1];
+    const img = document.getElementById('previewImg');
+    img.src = ev.target.result; img.style.display = '';
+    document.getElementById('aiScanBtn').style.display = '';
+    document.getElementById('aiStatus').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── AI scan ──
+async function runAIScan() {
+  if (!menuImgBase64) return;
+  const btn = document.getElementById('aiScanBtn');
+  btn.disabled = true; btn.textContent = '🤖 AI 辨識中...';
+  const statusEl = document.getElementById('aiStatus');
+  statusEl.style.display = '';
+  statusEl.innerHTML = `<div class="ai-status"><span class="spinner"></span>AI 正在辨識菜單圖片，請稍候...</div>`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: { type: 'base64', media_type: 'image/jpeg', data: menuImgBase64 }
+            },
+            {
+              type: 'text',
+              text: `請辨識這張菜單圖片中所有的品項名稱和價格。
+只回傳 JSON 格式，不要有任何說明文字或 markdown，格式如下：
+{"items":[{"name":"品項名稱","price":價格數字},...]}`
+            }
+          ]
+        }]
+      })
+    });
+    const data = await resp.json();
+    const text = data.content?.map(c => c.text||'').join('');
+    const clean = text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    newStoreItems = (parsed.items || []).map(i => ({
+      name: i.name || '',
+      price: Number(i.price) || 0
+    }));
+    statusEl.innerHTML = `<div class="ai-status">✅ 辨識完成！共找到 ${newStoreItems.length} 個品項，請確認後儲存</div>`;
+    renderItemsList();
+  } catch(e) {
+    statusEl.innerHTML = `<div class="ai-status" style="background:#FDEDEC;color:var(--primary)">❌ 辨識失敗，請手動輸入品項，或重試</div>`;
+  }
+  btn.disabled = false; btn.textContent = '🤖 重新辨識';
+}
+
+// ── Items list render ──
+function renderItemsList() {
+  const el = document.getElementById('itemsList');
+  document.getElementById('itemCountBadge').textContent = `共 ${newStoreItems.length} 項`;
+  if (!newStoreItems.length) { el.innerHTML = `<div style="text-align:center;color:var(--text3);padding:14px;font-size:13px">尚未新增品項</div>`; return; }
+  el.innerHTML = newStoreItems.map((item, i) => `
+    <div class="ai-result-item">
+      <input class="ai-item-name" value="${item.name.replace(/"/g,'&quot;')}" oninput="newStoreItems[${i}].name=this.value" placeholder="品項名稱"/>
+      <span style="font-size:13px;color:var(--text3)">$</span>
+      <input class="ai-item-price" value="${item.price}" oninput="newStoreItems[${i}].price=Number(this.value)||0" placeholder="0" type="number"/>
+      <button class="ai-del-btn" onclick="newStoreItems.splice(${i},1);renderItemsList()">🗑️</button>
+    </div>`).join('');
+}
+
+function addItemManually() {
+  const n = document.getElementById('addItemName').value.trim();
+  const p = Number(document.getElementById('addItemPrice').value) || 0;
+  if (!n) { document.getElementById('addItemName').style.borderColor='red'; return; }
+  document.getElementById('addItemName').style.borderColor='';
+  newStoreItems.push({ name: n, price: p });
+  document.getElementById('addItemName').value = '';
+  document.getElementById('addItemPrice').value = '';
+  renderItemsList();
+}
+
+// ── Save new store to Firebase ──
+async function saveNewStore() {
+  const name = document.getElementById('newStoreName').value.trim();
+  if (!name) { document.getElementById('newStoreName').style.borderColor='red'; showToast('⚠️ 請輸入店家名稱'); return; }
+  if (!newStoreItems.length) { showToast('⚠️ 請至少新增一個品項'); return; }
+
+  // Build menu structure: single category "菜單"
+  const storeData = {
+    name,
+    type: newStoreType,
+    categories: [{ cat: '菜單', items: newStoreItems.map(i => ({ n: i.name, p: i.price })) }],
+    createdAt: Date.now()
+  };
+
+  // Use name as key (sanitized)
+  const key = name.replace(/[.#$\/\[\]\s]/g, '_');
+  try {
+    await fbSet(`menus/${key}`, storeData);
+    savedMenus[key] = storeData;
+    showToast(`✅ 「${name}」已儲存！`);
+    // Reset form
+    document.getElementById('newStoreName').value = '';
+    newStoreItems = [];
+    menuImgBase64 = null;
+    document.getElementById('previewImg').style.display = 'none';
+    document.getElementById('aiScanBtn').style.display = 'none';
+    document.getElementById('aiStatus').style.display = 'none';
+    document.getElementById('menuImgInput').value = '';
+    renderItemsList();
+    updateAdminStoreGrids();
+    updateSavedCount();
+    switchMMTab('saved');
+  } catch(e) { showToast('❌ 儲存失敗，請重試'); }
+}
+
+// ── Load saved menus from Firebase ──
+async function loadSavedMenus() {
+  try {
+    const data = await fbGet('menus');
+    savedMenus = data || {};
+    updateAdminStoreGrids();
+    updateSavedCount();
+  } catch(e) {}
+}
+
+function updateSavedCount() {
+  document.getElementById('savedCount').textContent = Object.keys(savedMenus).length;
+}
+
+// ── Render saved stores list ──
+function renderSavedStores() {
+  const el = document.getElementById('savedStoresList');
+  const entries = Object.entries(savedMenus);
+  if (!entries.length) {
+    el.innerHTML = `<div class="empty-state"><span class="emoji">📂</span>尚無自訂菜單<br><small>點「新增菜單」來新增</small></div>`;
+    return;
+  }
+  el.innerHTML = entries.map(([key, store]) => {
+    const itemCount = store.categories?.reduce((a,c)=>a+(c.items?.length||0),0) || 0;
+    const typeLabel = store.type === 'drink' ? '🧋 飲料' : '🍜 主食';
+    return `<div class="saved-store-card">
+      <div style="flex:1">
+        <div class="sc-name">${store.name}</div>
+        <div class="sc-type">${typeLabel} · ${itemCount} 個品項</div>
+      </div>
+      <button class="sc-btn del" data-key="${key}" data-name="${store.name.replace(/"/g,'&quot;')}" onclick="deleteStore(this.dataset.key, this.dataset.name)">刪除</button>
+    </div>`;
+  }).join('');
+}
+
+// ── Delete saved store ──
+async function deleteStore(key, name) {
+  if (!confirm(`確定要刪除「${name}」的菜單？`)) return;
+  try {
+    await fetch(`${DB}/menus/${key}.json`, { method: 'DELETE' });
+    delete savedMenus[key];
+    updateAdminStoreGrids();
+    updateSavedCount();
+    renderSavedStores();
+    showToast(`🗑️「${name}」已刪除`);
+  } catch(e) { showToast('❌ 刪除失敗'); }
+}
+
+// ── Inject custom stores into admin store grids ──
+function updateAdminStoreGrids() {
+  const foodGrid = document.getElementById('foodStoreGrid');
+  const drinkGrid = document.getElementById('drinkStoreGrid');
+
+  // Remove previously injected custom buttons
+  foodGrid.querySelectorAll('.custom-store-btn').forEach(b => b.remove());
+  drinkGrid.querySelectorAll('.custom-store-btn').forEach(b => b.remove());
+
+  Object.entries(savedMenus).forEach(([key, store]) => {
+    const btn = document.createElement('button');
+    btn.className = 'store-btn custom-store-btn';
+    btn.id = `afs-${store.name}`;
+    btn.innerHTML = `<span class="emoji">🏪</span>${store.name}`;
+    if (store.type === 'food') {
+      btn.onclick = () => adminSelectFood(store.name);
+      btn.id = `afs-${store.name}`;
+      foodGrid.querySelector('.store-grid').appendChild(btn);
+    } else {
+      btn.onclick = () => adminSelectDrink(store.name);
+      btn.id = `ads-${store.name}`;
+      drinkGrid.querySelector('.store-grid').appendChild(btn);
+    }
+  });
+}
+
+// ── Get menu data (built-in or custom) ──
+function getMenuData(type, storeName) {
+  if (type === 'food') {
+    if (FM[storeName]) return FM[storeName];
+    const key = storeName.replace(/[.#$\/\[\]\s]/g, '_');
+    return savedMenus[key]?.categories || savedMenus[storeName]?.categories || null;
+  } else {
+    if (DM[storeName]) return DM[storeName];
+    const key = storeName.replace(/[.#$\/\[\]\s]/g, '_');
+    return savedMenus[key]?.categories || savedMenus[storeName]?.categories || null;
+  }
+}
 </script>
 </body>
 </html>
